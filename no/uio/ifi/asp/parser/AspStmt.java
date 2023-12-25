@@ -1,19 +1,34 @@
-// © 2021 Dag Langmyhr, Institutt for informatikk, Universitetet i Oslo
+/*
+ * Original code in this file by Dag Langmyhr, Institutt for informatikk, Universitetet i Oslo, 2021.
+ * Modifications made by Omar Massfih in 2023.
+ */
 
 package no.uio.ifi.asp.parser;
 
-import no.uio.ifi.asp.main.*;
 import no.uio.ifi.asp.scanner.*;
-import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 abstract class AspStmt extends AspSyntax {
-    AspStmt(int n) {
-	super(n);
+    AspStmt(int lineNumber) {
+        super(lineNumber);
     }
 
+    static AspStmt parse(Scanner scanner) {
+        enterParser("stmt");
+        AspStmt aspStmt = null;
+        
+        switch (scanner.curToken().kind) {
+            case forToken:
+            case ifToken:
+            case whileToken:
+            case defToken:
+                aspStmt = AspCompoundStmt.parse(scanner);
+                break;
+            default:
+                aspStmt = AspSmallStmtList.parse(scanner);
+                break;
+        }
 
-    static AspStmt parse(Scanner s) {
-	//-- Must be changed in part 2:
-	return null;
+        leaveParser("stmt");
+        return aspStmt;
     }
 }
