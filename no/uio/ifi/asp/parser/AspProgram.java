@@ -19,8 +19,8 @@ public class AspProgram extends AspSyntax {
 
     public static AspProgram parse(Scanner s) {
         enterParser("program");
-
         AspProgram aspProgram = new AspProgram(s.curLineNum());
+        
         while (s.curToken().kind != eofToken) {
             aspProgram.statements.add(AspStmt.parse(s));
         }
