@@ -1,44 +1,44 @@
-// © 2021 Dag Langmyhr, Institutt for informatikk, Universitetet i Oslo
+/*
+ * Original code in this file by Dag Langmyhr, Institutt for informatikk, Universitetet i Oslo, 2021.
+ * Modifications made by Omar Massfih in 2023.
+ */
 
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
-
-import no.uio.ifi.asp.main.*;
 import no.uio.ifi.asp.runtime.*;
 import no.uio.ifi.asp.scanner.*;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 public class AspProgram extends AspSyntax {
-    ArrayList<AspStmt> stmts = new ArrayList<>();
+    ArrayList<AspStmt> statements = new ArrayList<>();
 
-    AspProgram(int n) {
-	super(n);
+    AspProgram(int lineNumber) {
+        super(lineNumber);
     }
-
 
     public static AspProgram parse(Scanner s) {
-	enterParser("program");
+        enterParser("program");
 
-	AspProgram ap = new AspProgram(s.curLineNum());
-	while (s.curToken().kind != eofToken) {
-	    ap.stmts.add(AspStmt.parse(s));
-	}
+        AspProgram aspProgram = new AspProgram(s.curLineNum());
+        while (s.curToken().kind != eofToken) {
+            aspProgram.statements.add(AspStmt.parse(s));
+        }
 
-	leaveParser("program");
-	return ap;
+        leaveParser("program");
+        return aspProgram;
     }
-
 
     @Override
     public void prettyPrint() {
-	//-- Must be changed in part 2:
+        for (AspStmt aspStmt : statements) {
+            aspStmt.prettyPrint();
+        }
     }
-
 
     @Override
     public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-	//-- Must be changed in part 4:
-	return null;
+        // -- Must be changed in part 4:
+        return null;
     }
 }
