@@ -1,43 +1,59 @@
-// © 2021 Dag Langmyhr, Institutt for informatikk, Universitetet i Oslo
+/*
+ * Original code in this file by Dag Langmyhr, Institutt for informatikk, Universitetet i Oslo, 2021.
+ * Modifications made by Omar Massfih in 2023.
+ */
 
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
 
-import no.uio.ifi.asp.main.*;
 import no.uio.ifi.asp.runtime.*;
 import no.uio.ifi.asp.scanner.*;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 public class AspExpr extends AspSyntax {
-    //-- Must be changed in part 2:
-    // ArrayList<AspAndTest> andTests = new ArrayList<>();
+    ArrayList<AspAndTest> andTests = new ArrayList<>();
 
-    AspExpr(int n) {
-	super(n);
+    AspExpr(int lineNum) {
+        super(lineNum);
     }
-
 
     public static AspExpr parse(Scanner s) {
-	enterParser("expr");
+        enterParser("expr");
 
-	//-- Must be changed in part 2:
-	AspExpr ae = null;
+        AspExpr aspExpr = new AspExpr(s.curLineNum());
 
-	leaveParser("expr");
-	return ae;
+        while (true) {
+            aspExpr.andTests.add(AspAndTest.parse(s));
+
+            if (s.curToken().kind != orToken) {
+                break;
+            }
+
+            skip(s, orToken);
+        }
+
+        leaveParser("expr");
+        return aspExpr;
     }
-
 
     @Override
     public void prettyPrint() {
-	//-- Must be changed in part 2:
-    }
+		int n = 0;
 
+        for (AspAndTest aspAndTest : andTests) {
+            if (n > 0) {
+                prettyWrite(" or ");
+            }
+
+            aspAndTest.prettyPrint();
+            n++;
+        }
+    }
 
     @Override
     public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-	//-- Must be changed in part 3:
-	return null;
+        // -- Must be changed in part 3:
+        return null;
     }
 }
