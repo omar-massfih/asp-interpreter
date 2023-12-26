@@ -1,7 +1,9 @@
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
-
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
@@ -14,23 +16,23 @@ public class AspArguments extends AspPrimarySuffix{
 
     public static AspArguments parse(Scanner s) {
         enterParser("arguments");
-        AspArguments aa = new AspArguments(s.curLineNum());
+        AspArguments aspArguments = new AspArguments(s.curLineNum());
     
         skip(s, leftParToken);
     
         if (s.curToken().kind != rightParToken) {
-            aa.aspExprs.add(AspExpr.parse(s));
+            aspArguments.aspExprs.add(AspExpr.parse(s));
     
             while (s.curToken().kind == commaToken) {
                 skip(s, commaToken);
-                aa.aspExprs.add(AspExpr.parse(s));
+                aspArguments.aspExprs.add(AspExpr.parse(s));
             }
         }
     
         skip(s, rightParToken);
     
         leaveParser("arguments");
-        return aa;
+        return aspArguments;
     }
     
     @Override
@@ -50,5 +52,11 @@ public class AspArguments extends AspPrimarySuffix{
         }
 
         prettyWrite(")");
+    }
+
+    @Override
+    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
 }

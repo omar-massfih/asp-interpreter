@@ -1,7 +1,9 @@
 package no.uio.ifi.asp.parser;
 
 import static no.uio.ifi.asp.scanner.TokenKind.passToken;
-
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 
 public class AspPassStmt extends AspSmallStmt{
@@ -10,18 +12,24 @@ public class AspPassStmt extends AspSmallStmt{
         super(lineNumber);
     }
 
-    public static AspPassStmt parse(Scanner s) {
+    public static AspPassStmt parse(Scanner scanner) {
         enterParser("pass stmt");
-        AspPassStmt aps = new AspPassStmt(s.curLineNum());
+        AspPassStmt aspPassStmt = new AspPassStmt(scanner.curLineNum());
 
-        skip(s, passToken);
+        skip(scanner, passToken);
 
         leaveParser("pass stmt");
-        return aps;
+        return aspPassStmt;
     }
 
     @Override
     public void prettyPrint(){
         prettyWrite("pass");
+    }
+
+    @Override
+    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
 }

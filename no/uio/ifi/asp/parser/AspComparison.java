@@ -1,6 +1,9 @@
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 
 public class AspComparison extends AspSyntax {
@@ -11,22 +14,22 @@ public class AspComparison extends AspSyntax {
         super(lineNumber);
     }
 
-    public static AspComparison parse(Scanner s) {
+    public static AspComparison parse(Scanner scanner) {
         enterParser("comparison");
-        AspComparison ac = new AspComparison(s.curLineNum());
+        AspComparison aspComparison = new AspComparison(scanner.curLineNum());
 
         while (true) {
-            ac.aspTermList.add(AspTerm.parse(s));
+            aspComparison.aspTermList.add(AspTerm.parse(scanner));
 
-            if (s.isCompOpr()) {
-                ac.aspCompOprList.add(AspCompOpr.parse(s));
+            if (scanner.isCompOpr()) {
+                aspComparison.aspCompOprList.add(AspCompOpr.parse(scanner));
             } else {
                 break;
             }
         }
 
         leaveParser("comparison");
-        return ac;
+        return aspComparison;
     }
 
     @Override
@@ -42,5 +45,11 @@ public class AspComparison extends AspSyntax {
             
             i++;
         }
+    }
+
+    @Override
+    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
 }

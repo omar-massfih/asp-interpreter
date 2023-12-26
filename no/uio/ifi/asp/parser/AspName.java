@@ -1,7 +1,10 @@
 package no.uio.ifi.asp.parser;
 
-import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.nameToken;
+import no.uio.ifi.asp.scanner.Scanner;
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
 
 public class AspName extends AspAtom {
     public String name;
@@ -10,19 +13,25 @@ public class AspName extends AspAtom {
         super(lineNumber);
     }
 
-    public static AspName parse(Scanner s) {
+    public static AspName parse(Scanner scanner) {
         enterParser("name");
 
-        AspName an = new AspName(s.curLineNum());
-        an.name = s.curToken().name;
-        skip(s, nameToken);
+        AspName aspName = new AspName(scanner.curLineNum());
+        aspName.name = scanner.curToken().name;
+        skip(scanner, nameToken);
 
         leaveParser("name");
-        return an;
+        return aspName;
     }
 
     @Override
     void prettyPrint() {
         prettyWrite(name + "");
+    }
+
+    @Override
+    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
 }

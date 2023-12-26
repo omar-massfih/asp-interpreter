@@ -12,25 +12,25 @@ import no.uio.ifi.asp.scanner.*;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 public class AspExpr extends AspSyntax {
-    ArrayList<AspAndTest> andTests = new ArrayList<>();
+    ArrayList<AspAndTest> andTestList = new ArrayList<>();
 
     AspExpr(int lineNum) {
         super(lineNum);
     }
 
-    public static AspExpr parse(Scanner s) {
+    public static AspExpr parse(Scanner scanner) {
         enterParser("expr");
 
-        AspExpr aspExpr = new AspExpr(s.curLineNum());
+        AspExpr aspExpr = new AspExpr(scanner.curLineNum());
 
         while (true) {
-            aspExpr.andTests.add(AspAndTest.parse(s));
+            aspExpr.andTestList.add(AspAndTest.parse(scanner));
 
-            if (s.curToken().kind != orToken) {
+            if (scanner.curToken().kind != orToken) {
                 break;
             }
 
-            skip(s, orToken);
+            skip(scanner, orToken);
         }
 
         leaveParser("expr");
@@ -41,7 +41,7 @@ public class AspExpr extends AspSyntax {
     public void prettyPrint() {
 		int n = 0;
 
-        for (AspAndTest aspAndTest : andTests) {
+        for (AspAndTest aspAndTest : andTestList) {
             if (n > 0) {
                 prettyWrite(" or ");
             }

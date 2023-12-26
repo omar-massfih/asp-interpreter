@@ -1,43 +1,52 @@
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
+
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.equalToken;
 
 public class AspAssignmentStmt extends AspSmallStmt {
-    AspName an;
-    ArrayList<AspSubscription> as = new ArrayList<>();
-    AspExpr ae;
+    AspName aspName;
+    ArrayList<AspSubscription> aspSubsriptionList = new ArrayList<>();
+    AspExpr aspExpr;
 
     AspAssignmentStmt(int lineNumber) {
         super(lineNumber);
     }
 
-    public static AspAssignmentStmt parse(Scanner s) {
+    public static AspAssignmentStmt parse(Scanner scanner) {
         enterParser("assignment");
-        AspAssignmentStmt aas = new AspAssignmentStmt(s.curLineNum());
-        aas.an = AspName.parse(s);
+        AspAssignmentStmt aspAssignmentStmt = new AspAssignmentStmt(scanner.curLineNum());
+        aspAssignmentStmt.aspName = AspName.parse(scanner);
 
-        while (s.curToken().kind != equalToken) {
-            aas.as.add(AspSubscription.parse(s));
+        while (scanner.curToken().kind != equalToken) {
+            aspAssignmentStmt.aspSubsriptionList.add(AspSubscription.parse(scanner));
         }
 
-        skip(s, equalToken);
-        aas.ae = AspExpr.parse(s);
-
+        skip(scanner, equalToken);
+        aspAssignmentStmt.aspExpr = AspExpr.parse(scanner);
         leaveParser("assignment");
-        return aas;
+        return aspAssignmentStmt;
     }
 
     @Override
     public void prettyPrint() {
-        an.prettyPrint();
+        aspName.prettyPrint();
 
-        for (AspSubscription aspSubscription : as) {
+        for (AspSubscription aspSubscription : aspSubsriptionList) {
             aspSubscription.prettyPrint();
         }
 
         prettyWrite(" = ");
-        ae.prettyPrint();
+        aspExpr.prettyPrint();
+    }
+
+    @Override
+    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
 }

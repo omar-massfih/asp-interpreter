@@ -6,27 +6,27 @@ import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 import no.uio.ifi.asp.scanner.Token;
 
-public class AspFactorPrefix extends AspSyntax {
-    Token factorKind;
+public class AspTermOpr extends AspSyntax{
+    Token token;
     
-    AspFactorPrefix(int lineNumber) {
+    AspTermOpr(int lineNumber) {
         super(lineNumber);
     }
 
-    public static AspFactorPrefix parse(Scanner s) {
-        enterParser("factor prefix");
-        AspFactorPrefix aspFactorPrefix = new AspFactorPrefix(s.curLineNum());
+    public static AspTermOpr parse(Scanner scanner) {
+        enterParser("term opr");
+        AspTermOpr aspTermOpr = new AspTermOpr(scanner.curLineNum());
+        
+        aspTermOpr.token = scanner.curToken();
+        skip(scanner, scanner.curToken().kind);
 
-        aspFactorPrefix.factorKind = s.curToken();
-        skip(s, s.curToken().kind);
-
-        leaveParser("factor prefix");
-        return aspFactorPrefix;
+        leaveParser("term opr");
+        return aspTermOpr;
     }
 
     @Override
     void prettyPrint() {
-        prettyWrite(factorKind.toString() + " ");
+        prettyWrite(" " + token.toString() + " ");
     }
 
     @Override
@@ -34,4 +34,5 @@ public class AspFactorPrefix extends AspSyntax {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
+
 }

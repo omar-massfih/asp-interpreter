@@ -1,17 +1,18 @@
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
-
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
-import no.uio.ifi.asp.scanner.TokenKind;
 
 public class AspFactor extends AspSyntax {
     ArrayList<AspFactorPrefix> aspFactorPrefixList = new ArrayList<>();
     ArrayList<AspPrimary> aspPrimaryList = new ArrayList<>();
     ArrayList<AspFactorOpr> aspFactorOprList = new ArrayList<>();
 
-    AspFactor(int n) {
-        super(n);
+    AspFactor(int lineNumber) {
+        super(lineNumber);
     }
 
     public static AspFactor parse(Scanner s) {
@@ -51,5 +52,11 @@ public class AspFactor extends AspSyntax {
                 aspFactorOprList.get(i).prettyPrint();
             }
         }
+    }
+
+    @Override
+    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
 }

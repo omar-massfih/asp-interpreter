@@ -1,7 +1,10 @@
 package no.uio.ifi.asp.parser;
 
-import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.returnToken;
+import no.uio.ifi.asp.scanner.Scanner;
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
 
 public class AspReturnStmt extends AspSmallStmt{
     AspExpr aspExpr;
@@ -10,12 +13,12 @@ public class AspReturnStmt extends AspSmallStmt{
         super(lineNumber);
     }
 
-    public static AspReturnStmt parse(Scanner s) {
+    public static AspReturnStmt parse(Scanner scanner) {
         enterParser("return stmt");
-        AspReturnStmt aspReturnStmt = new AspReturnStmt(s.curLineNum());
+        AspReturnStmt aspReturnStmt = new AspReturnStmt(scanner.curLineNum());
 
-        skip(s, returnToken);
-        aspReturnStmt.aspExpr = AspExpr.parse(s);
+        skip(scanner, returnToken);
+        aspReturnStmt.aspExpr = AspExpr.parse(scanner);
 
         leaveParser("return stmt");
         return aspReturnStmt;
@@ -25,5 +28,11 @@ public class AspReturnStmt extends AspSmallStmt{
     public void prettyPrint() {
         prettyWrite("return ");
         aspExpr.prettyPrint();
+    }
+
+    @Override
+    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
 }

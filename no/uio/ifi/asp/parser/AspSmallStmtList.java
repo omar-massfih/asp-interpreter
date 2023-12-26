@@ -15,22 +15,22 @@ public class AspSmallStmtList extends AspStmt{
         super(lineNumber);
     }
 
-    public static AspSmallStmtList parse(Scanner s) {
+    public static AspSmallStmtList parse(Scanner scanner) {
         enterParser("small stmt list");
-        AspSmallStmtList aspSmallStmtList = new AspSmallStmtList(s.curLineNum());
-        aspSmallStmtList.aspSmallStatetments.add(AspSmallStmt.parse(s));
+        AspSmallStmtList aspSmallStmtList = new AspSmallStmtList(scanner.curLineNum());
+        aspSmallStmtList.aspSmallStatetments.add(AspSmallStmt.parse(scanner));
         
-        while (s.curToken().kind == semicolonToken) {
-            skip(s, semicolonToken);
+        while (scanner.curToken().kind == semicolonToken) {
+            skip(scanner, semicolonToken);
 
-            if (s.curToken().kind == newLineToken) {
+            if (scanner.curToken().kind == newLineToken) {
                 break;
             }
 
-            aspSmallStmtList.aspSmallStatetments.add(AspSmallStmt.parse(s));
+            aspSmallStmtList.aspSmallStatetments.add(AspSmallStmt.parse(scanner));
         }
 
-        skip(s, newLineToken);
+        skip(scanner, newLineToken);
         leaveParser("small stmt list");
         return aspSmallStmtList;
     }

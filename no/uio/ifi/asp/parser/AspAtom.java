@@ -1,11 +1,8 @@
 package no.uio.ifi.asp.parser;
 
-import no.uio.ifi.asp.runtime.RuntimeReturnValue;
-import no.uio.ifi.asp.runtime.RuntimeScope;
-import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 
-public class AspAtom extends AspSyntax{
+public abstract class AspAtom extends AspSyntax{
 
     AspAtom(int lineNumber) {
         super(lineNumber);

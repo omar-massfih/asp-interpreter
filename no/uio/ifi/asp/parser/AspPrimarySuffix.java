@@ -1,27 +1,26 @@
 package no.uio.ifi.asp.parser;
 
 import static no.uio.ifi.asp.scanner.TokenKind.leftParToken;
-
 import no.uio.ifi.asp.scanner.Scanner;
 
-public class AspPrimarySuffix extends AspSyntax {
+public abstract class AspPrimarySuffix extends AspSyntax {
     AspPrimarySuffix aspPrimarySuffix;
 
-    AspPrimarySuffix(int n) {
-        super(n);
+    AspPrimarySuffix(int lineNumber) {
+        super(lineNumber);
     }
 
-    public static AspPrimarySuffix parse(Scanner s) {
+    public static AspPrimarySuffix parse(Scanner scanner) {
         enterParser("primary suffix");
-        AspPrimarySuffix aps = null;
+        AspPrimarySuffix aspPrimarySuffix = null;
 
-        if (s.curToken().kind == leftParToken) {
-            aps = AspArguments.parse(s);
+        if (scanner.curToken().kind == leftParToken) {
+            aspPrimarySuffix = AspArguments.parse(scanner);
         } else {
-            aps = AspSubscription.parse(s);
+            aspPrimarySuffix = AspSubscription.parse(scanner);
         }
 
         leaveParser("primary suffix");
-        return aps;
+        return aspPrimarySuffix;
     }
 }

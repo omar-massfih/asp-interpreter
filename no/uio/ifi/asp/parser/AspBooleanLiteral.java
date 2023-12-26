@@ -1,41 +1,51 @@
 package no.uio.ifi.asp.parser;
 
 import static no.uio.ifi.asp.scanner.TokenKind.*;
+
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 import no.uio.ifi.asp.scanner.TokenKind;
 
 public class AspBooleanLiteral extends AspAtom{
     String booleanString;
-    boolean bool;
+    boolean booleanLiteral;
     TokenKind booleanKind;
 
-    AspBooleanLiteral(int n) {
-        super(n);
+    AspBooleanLiteral(int lineNumber) {
+        super(lineNumber);
     }
 
-    public static AspBooleanLiteral parse(Scanner s) {
+    public static AspBooleanLiteral parse(Scanner scanner) {
         enterParser("boolean literal");
-        AspBooleanLiteral aspBooleanLiteral = new AspBooleanLiteral(s.curLineNum());
-        aspBooleanLiteral.booleanString = s.curToken().toString();
+        AspBooleanLiteral aspBooleanLiteral = new AspBooleanLiteral(scanner.curLineNum());
+        aspBooleanLiteral.booleanString = scanner.curToken().toString();
 
         switch (aspBooleanLiteral.booleanString) {
             case "True":
-                aspBooleanLiteral.bool = true;
+                aspBooleanLiteral.booleanLiteral = true;
                 aspBooleanLiteral.booleanKind = trueToken;
                 break;
             default:
-                aspBooleanLiteral.bool = false;
+                aspBooleanLiteral.booleanLiteral = false;
                 aspBooleanLiteral.booleanKind = falseToken;
                 break;
         }
 
-        skip(s, aspBooleanLiteral.booleanKind);
+        skip(scanner, aspBooleanLiteral.booleanKind);
         leaveParser("boolean literal");
         return aspBooleanLiteral;
     }
 
     @Override
     public void prettyPrint() {
-        prettyWrite(bool ? "True" : "False");
+        prettyWrite(booleanLiteral ? "True" : "False");
+    }
+
+    @Override
+    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eval'");
     }
 }
