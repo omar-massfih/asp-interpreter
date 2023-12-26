@@ -1,12 +1,27 @@
 package no.uio.ifi.asp.parser;
 
+import static no.uio.ifi.asp.scanner.TokenKind.passToken;
+
 import no.uio.ifi.asp.scanner.Scanner;
 
-public class AspPassStmt {
+public class AspPassStmt extends AspSmallStmt{
 
-    public static AspSmallStmt parse(Scanner s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parse'");
+    AspPassStmt(int lineNumber) {
+        super(lineNumber);
     }
 
+    public static AspPassStmt parse(Scanner s) {
+        enterParser("pass stmt");
+        AspPassStmt aps = new AspPassStmt(s.curLineNum());
+
+        skip(s, passToken);
+
+        leaveParser("pass stmt");
+        return aps;
+    }
+
+    @Override
+    public void prettyPrint(){
+        prettyWrite("pass");
+    }
 }
