@@ -311,27 +311,27 @@ public class Scanner {
 	}
 
 	private String expandLeadingTabs(String s) {
-        StringBuilder newLine = new StringBuilder();
-        int spaceCount = 0;
+		StringBuilder newLine = new StringBuilder();
+		int spaceCount = 0;
 
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == ' ') {
-                spaceCount++;
-                newLine.append(' ');
-            } else if (s.charAt(i) == '\t') {
-                int spacesToAdd = 4 - (spaceCount % 4);
-                for (int j = 0; j < spacesToAdd; j++) {
-                    newLine.append(' ');
-                }
-                spaceCount += spacesToAdd;
-            } else {
-                newLine.append(s.substring(i));
-                break;
-            }
-        }
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == ' ') {
+				spaceCount++;
+				newLine.append(' ');
+			} else if (s.charAt(i) == '\t') {
+				int spacesToAdd = 4 - (spaceCount % 4);
+				for (int j = 0; j < spacesToAdd; j++) {
+					newLine.append(' ');
+				}
+				spaceCount += spacesToAdd;
+			} else {
+				newLine.append(s.substring(i));
+				break;
+			}
+		}
 
-        return newLine.toString();
-    }
+		return newLine.toString();
+	}
 
 	private boolean isLetterAZ(char c) {
 		return ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') || (c == '_');
@@ -343,27 +343,25 @@ public class Scanner {
 
 	public boolean isCompOpr() {
 		TokenKind k = curToken().kind;
-		// -- Must be changed in part 2:
-		return false;
+		return k == lessToken || k == greaterToken || k == doubleEqualToken || k == lessEqualToken
+				|| k == greaterEqualToken
+				|| k == notEqualToken;
 	}
 
 	public boolean isFactorPrefix() {
-		TokenKind k = curToken().kind;
-		// -- Must be changed in part 2:
-		return false;
-	}
+        TokenKind k = curToken().kind;
+        return k == plusToken || k == minusToken;
+    }
 
 	public boolean isFactorOpr() {
-		TokenKind k = curToken().kind;
-		// -- Must be changed in part 2:
-		return false;
-	}
+        TokenKind k = curToken().kind;
+        return k == astToken || k == slashToken || k == percentToken || k == doubleSlashToken;
+    }
 
 	public boolean isTermOpr() {
-		TokenKind k = curToken().kind;
-		// -- Must be changed in part 2:
-		return false;
-	}
+        TokenKind k = curToken().kind;
+        return k == plusToken || k == minusToken;
+    }
 
 	public boolean anyEqualToken() {
 		for (Token t : curLineTokens) {
