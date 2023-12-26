@@ -33,6 +33,18 @@ public class Scanner {
 		}
 	}
 
+	public String getCurFileName() {
+		return curFileName;
+	}
+
+	public int getTABDIST() {
+		return TABDIST;
+	}
+
+	public boolean getIndentationError() {
+		return indentationError;
+	}
+
 	private void scannerError(String message) {
 		String m = "Asp scanner error";
 		if (curLineNum() > 0)
