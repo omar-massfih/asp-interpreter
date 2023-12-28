@@ -1,4 +1,8 @@
-// © 2021 Dag Langmyhr, Institutt for informatikk, Universitetet i Oslo
+/*
+ * Original code in this file by Dag Langmyhr, Institutt for informatikk, Universitetet i Oslo, 2021.
+ * Modifications made by Omar Massfih in 2023.
+ * 
+ */
 
 package no.uio.ifi.asp.runtime;
 
@@ -9,6 +13,7 @@ public class RuntimeReturnValue extends Exception {
     public RuntimeValue value;
 
     public RuntimeReturnValue(RuntimeValue v, int lNum) {
-	value = v;  lineNum = lNum;
+        value = v;
+        lineNum = lNum;
     }
 }
