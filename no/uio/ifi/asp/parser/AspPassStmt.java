@@ -29,7 +29,7 @@ public class AspPassStmt extends AspSmallStmt{
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        trace("pass");
+        return null;
     }
 }

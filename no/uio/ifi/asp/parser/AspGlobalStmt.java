@@ -7,24 +7,24 @@ import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
-public class AspGlobalStmt extends AspSmallStmt{
-    ArrayList<AspName> aspNames = new ArrayList<>();
+public class AspGlobalStmt extends AspSmallStmt {
+    ArrayList<AspName> aspNameList = new ArrayList<>();
 
     public AspGlobalStmt(int lineNumber) {
         super(lineNumber);
     }
 
-    public static AspGlobalStmt parse(Scanner s) {
+    public static AspGlobalStmt parse(Scanner scanner) {
         enterParser("global stmt");
-        AspGlobalStmt aspGlobalStmt = new AspGlobalStmt(s.curLineNum());
+        AspGlobalStmt aspGlobalStmt = new AspGlobalStmt(scanner.curLineNum());
 
-        skip(s, globalToken);
+        skip(scanner, globalToken);
 
         while (true) {
-            aspGlobalStmt.aspNames.add(AspName.parse(s));
+            aspGlobalStmt.aspNameList.add(AspName.parse(scanner));
 
-            if (s.curToken().kind == commaToken) {
-                skip(s, commaToken);
+            if (scanner.curToken().kind == commaToken) {
+                skip(scanner, commaToken);
             } else {
                 break;
             }
@@ -38,10 +38,10 @@ public class AspGlobalStmt extends AspSmallStmt{
     public void prettyPrint() {
         prettyWrite("global ");
 
-        for (int i = 0; i < aspNames.size(); i++) {
-            aspNames.get(i).prettyPrint();
+        for (int i = 0; i < aspNameList.size(); i++) {
+            aspNameList.get(i).prettyPrint();
 
-            if (aspNames.size() > 1 && i < aspNames.size() - 1) {
+            if (aspNameList.size() > 1 && i < aspNameList.size() - 1) {
                 prettyWrite(", ");
             }
         }
@@ -49,7 +49,10 @@ public class AspGlobalStmt extends AspSmallStmt{
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
+        for (AspName aspName : aspNameList) {
+            curScope.registerGlobalName(aspName.name);
+        }
+
         return null;
     }
 }

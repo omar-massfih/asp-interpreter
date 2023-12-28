@@ -16,10 +16,8 @@ public class AspTermOpr extends AspSyntax{
     public static AspTermOpr parse(Scanner scanner) {
         enterParser("term opr");
         AspTermOpr aspTermOpr = new AspTermOpr(scanner.curLineNum());
-        
         aspTermOpr.token = scanner.curToken();
         skip(scanner, scanner.curToken().kind);
-
         leaveParser("term opr");
         return aspTermOpr;
     }
@@ -31,8 +29,6 @@ public class AspTermOpr extends AspSyntax{
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        return null;
     }
-
 }

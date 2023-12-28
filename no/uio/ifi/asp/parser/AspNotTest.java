@@ -14,17 +14,17 @@ public class AspNotTest extends AspSyntax{
         super(lineNumber);
     }
 
-    public static AspNotTest parse(Scanner s) {
+    public static AspNotTest parse(Scanner scanner) {
         enterParser("not test");
 
-        AspNotTest aspNotTest = new AspNotTest(s.curLineNum());
+        AspNotTest aspNotTest = new AspNotTest(scanner.curLineNum());
 
-        if (s.curToken().kind == notToken) {
-            skip(s, notToken);
+        if (scanner.curToken().kind == notToken) {
+            skip(scanner, notToken);
             aspNotTest.notTest = true;
         }
 
-        aspNotTest.aspComparison = AspComparison.parse(s);
+        aspNotTest.aspComparison = AspComparison.parse(scanner);
 
         leaveParser("not test");
         return aspNotTest;
@@ -40,8 +40,8 @@ public class AspNotTest extends AspSyntax{
     }
 
     @Override
-    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+    public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        RuntimeValue runtimeValue = aspComparison.eval(curScope);
+        return notTest ? runtimeValue.evalNot(this) : runtimeValue;
     }
 }

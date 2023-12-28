@@ -2,6 +2,7 @@ package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
 
+import no.uio.ifi.asp.runtime.RuntimeListValue;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
@@ -9,7 +10,7 @@ import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 public class AspListDisplay extends AspAtom {
-    ArrayList<AspExpr> aspExpr = new ArrayList<>();
+    ArrayList<AspExpr> aspExprList = new ArrayList<>();
 
     AspListDisplay(int lineNumber) {
         super(lineNumber);
@@ -23,7 +24,7 @@ public class AspListDisplay extends AspAtom {
 
         while (true) {
             if (scanner.curToken().kind != rightBracketToken) {
-                aspListDisplay.aspExpr.add(AspExpr.parse(scanner));
+                aspListDisplay.aspExprList.add(AspExpr.parse(scanner));
                 
                 if (scanner.curToken().kind == commaToken) {
                     skip(scanner, commaToken);
@@ -45,10 +46,10 @@ public class AspListDisplay extends AspAtom {
     void prettyPrint() {
         prettyWrite("[");
 
-        for (int i = 0; i < aspExpr.size(); i++) {
-            aspExpr.get(i).prettyPrint();
+        for (int i = 0; i < aspExprList.size(); i++) {
+            aspExprList.get(i).prettyPrint();
 
-            if (i < aspExpr.size() - 1) {
+            if (i < aspExprList.size() - 1) {
                 prettyWrite(", ");
             }
         }
@@ -58,7 +59,12 @@ public class AspListDisplay extends AspAtom {
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        RuntimeListValue runtimeListValue = new RuntimeListValue(new ArrayList<RuntimeValue>());
+
+        for (AspExpr ae : aspExprList) {
+            runtimeListValue.getRuntimeValueList().add(ae.eval(curScope));
+        }
+
+        return runtimeListValue;
     }
 }

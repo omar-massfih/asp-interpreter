@@ -1,7 +1,10 @@
 package no.uio.ifi.asp.parser;
 
+import no.uio.ifi.asp.runtime.RuntimeDictValue;
+import no.uio.ifi.asp.runtime.RuntimeListValue;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeStringValue;
 import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
@@ -44,8 +47,17 @@ public class AspPrimary extends AspSyntax {
     }
 
     @Override
-    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+    public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        RuntimeValue runtimeValue = aspAtom.eval(curScope);
+
+        for (AspPrimarySuffix aspPrimarySuffix : aspPrimarySuffixList) {
+            if (runtimeValue instanceof RuntimeDictValue || runtimeValue instanceof RuntimeListValue || runtimeValue instanceof RuntimeStringValue) {
+                runtimeValue = runtimeValue.evalSubscription(aspPrimarySuffix.eval(curScope), this);
+            } else if(aspPrimarySuffix instanceof AspArguments){
+                runtimeValue = runtimeValue.evalFuncCall(((RuntimeListValue) aspPrimarySuffix.eval(curScope)).getRuntimeValueList(), this);
+            }
+        }
+
+        return runtimeValue;
     }
 }

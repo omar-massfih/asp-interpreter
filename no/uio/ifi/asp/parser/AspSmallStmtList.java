@@ -9,7 +9,7 @@ import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 
 public class AspSmallStmtList extends AspStmt{
-    ArrayList<AspSmallStmt> aspSmallStatetments = new ArrayList<>();
+    ArrayList<AspSmallStmt> aspSmallStmtList = new ArrayList<>();
 
     AspSmallStmtList(int lineNumber) {
         super(lineNumber);
@@ -18,7 +18,7 @@ public class AspSmallStmtList extends AspStmt{
     public static AspSmallStmtList parse(Scanner scanner) {
         enterParser("small stmt list");
         AspSmallStmtList aspSmallStmtList = new AspSmallStmtList(scanner.curLineNum());
-        aspSmallStmtList.aspSmallStatetments.add(AspSmallStmt.parse(scanner));
+        aspSmallStmtList.aspSmallStmtList.add(AspSmallStmt.parse(scanner));
         
         while (scanner.curToken().kind == semicolonToken) {
             skip(scanner, semicolonToken);
@@ -27,7 +27,7 @@ public class AspSmallStmtList extends AspStmt{
                 break;
             }
 
-            aspSmallStmtList.aspSmallStatetments.add(AspSmallStmt.parse(scanner));
+            aspSmallStmtList.aspSmallStmtList.add(AspSmallStmt.parse(scanner));
         }
 
         skip(scanner, newLineToken);
@@ -37,10 +37,10 @@ public class AspSmallStmtList extends AspStmt{
 
     @Override
     void prettyPrint() {
-        for (int i = 0; i < aspSmallStatetments.size(); i++) {
-            aspSmallStatetments.get(i).prettyPrint();
+        for (int i = 0; i < aspSmallStmtList.size(); i++) {
+            aspSmallStmtList.get(i).prettyPrint();
 
-            if (i < aspSmallStatetments.size() - 1) {
+            if (i < aspSmallStmtList.size() - 1) {
                 prettyWrite("; ");
             }
         }
@@ -50,8 +50,12 @@ public class AspSmallStmtList extends AspStmt{
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
-    }
+        RuntimeValue runtimeValue = null;
 
+        for (AspSmallStmt aspSmallStmt : aspSmallStmtList) {
+            runtimeValue = aspSmallStmt.eval(curScope);
+        }
+
+        return runtimeValue;
+    }
 }

@@ -1,8 +1,10 @@
 package no.uio.ifi.asp.parser;
 
-import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
-
+import no.uio.ifi.asp.runtime.RuntimeReturnValue;
+import no.uio.ifi.asp.runtime.RuntimeScope;
+import no.uio.ifi.asp.runtime.RuntimeValue;
+import no.uio.ifi.asp.scanner.Scanner;
 import java.util.ArrayList;
 
 public class AspIfStmt extends AspCompoundStmt {
@@ -14,24 +16,24 @@ public class AspIfStmt extends AspCompoundStmt {
         super(lineNumber);
     }
 
-    public static AspIfStmt parse(Scanner s) {
+    public static AspIfStmt parse(Scanner scanner) {
         enterParser("if stmt");
-        AspIfStmt aspIfStmt = new AspIfStmt(s.curLineNum());
+        AspIfStmt aspIfStmt = new AspIfStmt(scanner.curLineNum());
 
-        skip(s, ifToken);
+        skip(scanner, ifToken);
 
         while (true) {
-            aspIfStmt.aspExprList.add(AspExpr.parse(s));
-            skip(s, colonToken);
-            aspIfStmt.aspSuiteList.add(AspSuite.parse(s));
+            aspIfStmt.aspExprList.add(AspExpr.parse(scanner));
+            skip(scanner, colonToken);
+            aspIfStmt.aspSuiteList.add(AspSuite.parse(scanner));
 
-            if (s.curToken().kind == elseToken) {
-                skip(s, elseToken);
-                skip(s, colonToken);
-                aspIfStmt.elseSuite = AspSuite.parse(s);
+            if (scanner.curToken().kind == elseToken) {
+                skip(scanner, elseToken);
+                skip(scanner, colonToken);
+                aspIfStmt.elseSuite = AspSuite.parse(scanner);
                 break;
-            } else if (s.curToken().kind == elifToken) {
-                skip(s, elifToken);
+            } else if (scanner.curToken().kind == elifToken) {
+                skip(scanner, elifToken);
             } else {
                 break;
             }
@@ -59,5 +61,22 @@ public class AspIfStmt extends AspCompoundStmt {
             prettyWrite("else: ");
             elseSuite.prettyPrint();
         }
+    }
+
+    @Override
+    public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        for (int i = 0; i < aspExprList.size(); ++i) {
+            if (aspExprList.get(i).eval(curScope).getBoolValue("if", this)) {
+                trace("if True alt #" + (i + 1) + ": ...");
+                return aspSuiteList.get(i).eval(curScope);
+            }
+        }
+        
+        if (elseSuite != null) {
+            trace("else: ...");
+            return elseSuite.eval(curScope);
+        }
+        
+        return null;
     }
 }

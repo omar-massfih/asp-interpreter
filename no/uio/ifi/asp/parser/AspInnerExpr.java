@@ -35,7 +35,6 @@ public class AspInnerExpr extends AspAtom {
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        return aspExpr.eval(curScope);
     }
 }

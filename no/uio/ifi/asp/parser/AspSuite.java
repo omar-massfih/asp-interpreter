@@ -55,8 +55,17 @@ public class AspSuite extends AspSyntax{
     }
 
     @Override
-    RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+    public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
+        if (aspSmallStmtList != null) {
+            return aspSmallStmtList.eval(curScope);
+        }
+    
+        RuntimeValue runtimeValue = null;
+
+        for (AspStmt aspStmt : aspStmtList) {
+            runtimeValue = aspStmt.eval(curScope);
+        }
+
+        return runtimeValue;
     }
 }
