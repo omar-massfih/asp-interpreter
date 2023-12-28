@@ -13,12 +13,12 @@ public class AspFactorOpr extends AspSyntax{
         super(lineNumber);
     }
 
-    public static AspFactorOpr parse(Scanner s) {
+    public static AspFactorOpr parse(Scanner scanner) {
         enterParser("factor opr");
-        AspFactorOpr aspFactorOpr = new AspFactorOpr(s.curLineNum());
+        AspFactorOpr aspFactorOpr = new AspFactorOpr(scanner.curLineNum());
 
-        aspFactorOpr.token = s.curToken();
-        skip(s, s.curToken().kind);
+        aspFactorOpr.token = scanner.curToken();
+        skip(scanner, scanner.curToken().kind);
 
         leaveParser("factor opr");
         return aspFactorOpr;
@@ -31,7 +31,6 @@ public class AspFactorOpr extends AspSyntax{
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        return null;
     }
 }

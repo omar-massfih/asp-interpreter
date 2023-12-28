@@ -14,8 +14,8 @@ import static no.uio.ifi.asp.scanner.TokenKind.*;
 public class AspExpr extends AspSyntax {
     ArrayList<AspAndTest> andTestList = new ArrayList<>();
 
-    AspExpr(int lineNum) {
-        super(lineNum);
+    AspExpr(int lineNumber) {
+        super(lineNumber);
     }
 
     public static AspExpr parse(Scanner scanner) {
@@ -53,7 +53,16 @@ public class AspExpr extends AspSyntax {
 
     @Override
     public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // -- Must be changed in part 3:
-        return null;
+        RuntimeValue runtimeValue = andTestList.get(0).eval(curScope);
+
+        for (int i = 1; i < andTestList.size(); i++){
+            if (runtimeValue.getBoolValue("or", this)) {
+                return runtimeValue;
+            }
+
+            runtimeValue = andTestList.get(i).eval(curScope);
+        }
+
+        return runtimeValue;
     }
 }

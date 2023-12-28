@@ -46,8 +46,17 @@ public class AspAndTest extends AspSyntax {
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
-    }
+        RuntimeValue runtimeValue = aspNotTestList.get(0).eval(curScope);
 
+        for (int i = 1; i < aspNotTestList.size(); i++) {
+            //For å gå ut av testen ved tidligste False
+            if (!runtimeValue.getBoolValue("and", this)) {
+                return runtimeValue;
+            }
+
+            runtimeValue = aspNotTestList.get(i).eval(curScope);
+        }
+
+        return runtimeValue;
+    }
 }

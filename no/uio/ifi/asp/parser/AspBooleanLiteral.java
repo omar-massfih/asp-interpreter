@@ -2,6 +2,7 @@ package no.uio.ifi.asp.parser;
 
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
+import no.uio.ifi.asp.runtime.RuntimeBoolValue;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
@@ -45,7 +46,6 @@ public class AspBooleanLiteral extends AspAtom{
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        return new RuntimeBoolValue(booleanLiteral);
     }
 }

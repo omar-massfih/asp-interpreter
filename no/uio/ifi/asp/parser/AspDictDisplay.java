@@ -1,5 +1,6 @@
 package no.uio.ifi.asp.parser;
 
+import no.uio.ifi.asp.runtime.RuntimeDictValue;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
@@ -7,6 +8,7 @@ import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AspDictDisplay extends AspAtom {
     ArrayList<AspStringLiteral> aspStringLiterals = new ArrayList<>();
@@ -16,20 +18,20 @@ public class AspDictDisplay extends AspAtom {
         super(lineNumber);
     }
 
-    public static AspDictDisplay parse(Scanner s) {
+    public static AspDictDisplay parse(Scanner scanner) {
         enterParser("dict displat");
-        AspDictDisplay aspDictDisplay = new AspDictDisplay(s.curLineNum());
+        AspDictDisplay aspDictDisplay = new AspDictDisplay(scanner.curLineNum());
 
-        skip(s, leftBraceToken);
+        skip(scanner, leftBraceToken);
 
         while (true) {
-            if (s.curToken().kind == stringToken) {
-                aspDictDisplay.aspStringLiterals.add(AspStringLiteral.parse(s));
-                skip(s, colonToken);
-                aspDictDisplay.aspExprs.add(AspExpr.parse(s));
+            if (scanner.curToken().kind == stringToken) {
+                aspDictDisplay.aspStringLiterals.add(AspStringLiteral.parse(scanner));
+                skip(scanner, colonToken);
+                aspDictDisplay.aspExprs.add(AspExpr.parse(scanner));
 
-                if (s.curToken().kind == commaToken) {
-                    skip(s, commaToken);
+                if (scanner.curToken().kind == commaToken) {
+                    skip(scanner, commaToken);
                 } else {
                     break;
                 }
@@ -38,7 +40,7 @@ public class AspDictDisplay extends AspAtom {
             }
         }
 
-        skip(s, rightBraceToken);
+        skip(scanner, rightBraceToken);
 
         leaveParser("dict display");
         return aspDictDisplay;
@@ -63,7 +65,12 @@ public class AspDictDisplay extends AspAtom {
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        RuntimeDictValue runtimeDictValue = new RuntimeDictValue(new HashMap<>());
+
+        for (int i = 0; i < aspStringLiterals.size(); i++) {
+            runtimeDictValue.dict.put(aspStringLiterals.get(i).stringLiteral , aspExprs.get(i).eval(curScope));
+        }
+
+        return runtimeDictValue;
     }
 }

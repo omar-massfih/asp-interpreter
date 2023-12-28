@@ -3,6 +3,7 @@ package no.uio.ifi.asp.parser;
 import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
+import no.uio.ifi.asp.runtime.RuntimeFloatValue;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
@@ -14,12 +15,12 @@ public class AspFloatLiteral extends AspAtom {
         super(lineNumber);
     }
 
-    public static AspFloatLiteral parse(Scanner s) {
+    public static AspFloatLiteral parse(Scanner scanner) {
         enterParser("float literal");
-        AspFloatLiteral aspFloatLiteral = new AspFloatLiteral(s.curLineNum());
+        AspFloatLiteral aspFloatLiteral = new AspFloatLiteral(scanner.curLineNum());
 
-        aspFloatLiteral.floatLiteral = s.curToken().floatLit;
-        skip(s, floatToken);
+        aspFloatLiteral.floatLiteral = scanner.curToken().floatLit;
+        skip(scanner, floatToken);
 
         leaveParser("float literal");
         return aspFloatLiteral;
@@ -32,7 +33,6 @@ public class AspFloatLiteral extends AspAtom {
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        return new RuntimeFloatValue(floatLiteral);
     }
 }

@@ -1,6 +1,8 @@
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
+
+import no.uio.ifi.asp.runtime.RuntimeListValue;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
@@ -8,28 +10,28 @@ import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 public class AspArguments extends AspPrimarySuffix{
-    ArrayList<AspExpr> aspExprs = new ArrayList<>();
+    ArrayList<AspExpr> aspExprList = new ArrayList<>();
 
     AspArguments(int lineNumber) {
         super(lineNumber);
     }
 
-    public static AspArguments parse(Scanner s) {
+    public static AspArguments parse(Scanner scanner) {
         enterParser("arguments");
-        AspArguments aspArguments = new AspArguments(s.curLineNum());
+        AspArguments aspArguments = new AspArguments(scanner.curLineNum());
     
-        skip(s, leftParToken);
+        skip(scanner, leftParToken);
     
-        if (s.curToken().kind != rightParToken) {
-            aspArguments.aspExprs.add(AspExpr.parse(s));
+        if (scanner.curToken().kind != rightParToken) {
+            aspArguments.aspExprList.add(AspExpr.parse(scanner));
     
-            while (s.curToken().kind == commaToken) {
-                skip(s, commaToken);
-                aspArguments.aspExprs.add(AspExpr.parse(s));
+            while (scanner.curToken().kind == commaToken) {
+                skip(scanner, commaToken);
+                aspArguments.aspExprList.add(AspExpr.parse(scanner));
             }
         }
     
-        skip(s, rightParToken);
+        skip(scanner, rightParToken);
     
         leaveParser("arguments");
         return aspArguments;
@@ -41,7 +43,7 @@ public class AspArguments extends AspPrimarySuffix{
 
         boolean isFirst = true;
 
-        for (AspExpr ae : aspExprs) {
+        for (AspExpr ae : aspExprList) {
             if (!isFirst) {
                 prettyWrite(", ");
             } else {
@@ -56,7 +58,12 @@ public class AspArguments extends AspPrimarySuffix{
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        ArrayList<RuntimeValue> runtimeValueList = new ArrayList<>();
+
+        for (AspExpr aspExpr : aspExprList) {
+            runtimeValueList.add(aspExpr.eval(curScope));
+        }
+
+        return new RuntimeListValue(runtimeValueList);
     }
 }

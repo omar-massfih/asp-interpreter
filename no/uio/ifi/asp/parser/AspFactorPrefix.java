@@ -13,12 +13,12 @@ public class AspFactorPrefix extends AspSyntax {
         super(lineNumber);
     }
 
-    public static AspFactorPrefix parse(Scanner s) {
+    public static AspFactorPrefix parse(Scanner scanner) {
         enterParser("factor prefix");
-        AspFactorPrefix aspFactorPrefix = new AspFactorPrefix(s.curLineNum());
+        AspFactorPrefix aspFactorPrefix = new AspFactorPrefix(scanner.curLineNum());
 
-        aspFactorPrefix.factorKind = s.curToken();
-        skip(s, s.curToken().kind);
+        aspFactorPrefix.factorKind = scanner.curToken();
+        skip(scanner, scanner.curToken().kind);
 
         leaveParser("factor prefix");
         return aspFactorPrefix;
@@ -31,7 +31,6 @@ public class AspFactorPrefix extends AspSyntax {
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eval'");
+        return null;
     }
 }

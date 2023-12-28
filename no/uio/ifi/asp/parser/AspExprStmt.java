@@ -8,15 +8,15 @@ import no.uio.ifi.asp.scanner.Scanner;
 public class AspExprStmt extends AspSmallStmt{
     AspExpr aspExpr;
 
-    public AspExprStmt(int n) {
-        super(n);
+    public AspExprStmt(int lineNumber) {
+        super(lineNumber);
     }
 
-    public static AspExprStmt parse(Scanner s) {
+    public static AspExprStmt parse(Scanner scanner) {
         enterParser("expr stmt");
-        AspExprStmt aspExprStmt = new AspExprStmt(s.curLineNum());
+        AspExprStmt aspExprStmt = new AspExprStmt(scanner.curLineNum());
 
-        aspExprStmt.aspExpr = AspExpr.parse(s);
+        aspExprStmt.aspExpr = AspExpr.parse(scanner);
 
         leaveParser("expr stmt");
         return aspExprStmt;
@@ -29,7 +29,8 @@ public class AspExprStmt extends AspSmallStmt{
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        // TODO Auto-generated method stub
-        return null;
+        RuntimeValue runtimeValue = aspExpr.eval(curScope);
+        trace("Expression statement produced " + runtimeValue.toString());
+        return runtimeValue;
     }
 }
