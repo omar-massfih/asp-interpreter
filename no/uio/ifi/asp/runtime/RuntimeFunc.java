@@ -7,16 +7,16 @@ import no.uio.ifi.asp.parser.AspFuncDef;
 import no.uio.ifi.asp.parser.AspSyntax;
 
 public class RuntimeFunc extends RuntimeValue {
-    private AspFuncDef afd;
+    private AspFuncDef aspFuncDef;
     private String name;
     private ArrayList<RuntimeValue> parameters;
-    private RuntimeScope rs;
+    private RuntimeScope runtimeScope;
 
-    public RuntimeFunc(RuntimeValue v, RuntimeScope curScope, AspFuncDef afd, ArrayList<RuntimeValue> parameters) {
-        this.afd = afd;
-        this.name = v.getStringValue(name, afd);
+    public RuntimeFunc(RuntimeValue runtimeValue, RuntimeScope curScope, AspFuncDef aspFuncDef, ArrayList<RuntimeValue> parameters) {
+        this.aspFuncDef = aspFuncDef;
+        this.name = runtimeValue.getStringValue(name, aspFuncDef);
         this.parameters = parameters;
-        this.rs = curScope;
+        this.runtimeScope = curScope;
     }
 
     public RuntimeFunc(String name) {
@@ -40,21 +40,21 @@ public class RuntimeFunc extends RuntimeValue {
         
         Main.log.traceEval("Call function " + name + " with params " + actualParams.toString(), where);
 
-        RuntimeValue rv = null;
-        RuntimeScope rs2 = new RuntimeScope(rs);
+        RuntimeValue runtimeValue = null;
+        RuntimeScope runtimeScope2 = new RuntimeScope(runtimeScope);
 
         for (int i = 0; i < parameters.size(); i++) {
-            rv = actualParams.get(i);
+            runtimeValue = actualParams.get(i);
 
-            rs2.assign(parameters.get(i).getStringValue("", where), rv);
+            runtimeScope2.assign(parameters.get(i).getStringValue("", where), runtimeValue);
         }
         
         try {
-            rv = afd.runFunction(rs2);
-        } catch (RuntimeReturnValue rrv) {
-            return rrv.value;
+            runtimeValue = aspFuncDef.runFunction(runtimeScope2);
+        } catch (RuntimeReturnValue runtimeReturnValue) {
+            return runtimeReturnValue.value;
         }
 
-        return rv;
+        return runtimeValue;
     }
 }

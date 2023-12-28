@@ -42,32 +42,32 @@ public abstract class RuntimeValue {
 
     // For part 3:
 
-    public RuntimeValue evalAdd(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalAdd(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'+' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalDivide(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalDivide(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'/' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalEqual(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalEqual(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'==' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalGreater(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalGreater(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'>' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalGreaterEqual(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalGreaterEqual(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'>=' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalIntDivide(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalIntDivide(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'//' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
@@ -77,22 +77,22 @@ public abstract class RuntimeValue {
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalLess(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalLess(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'<' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalLessEqual(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalLessEqual(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'<=' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalModulo(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalModulo(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'%' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalMultiply(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalMultiply(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'*' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
@@ -107,7 +107,7 @@ public abstract class RuntimeValue {
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalNotEqual(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalNotEqual(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'!=' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
@@ -117,20 +117,20 @@ public abstract class RuntimeValue {
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalSubscription(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalSubscription(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("Subscription '[...]' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
-    public RuntimeValue evalSubtract(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalSubtract(RuntimeValue runtimeValue, AspSyntax where) {
         runtimeError("'-' undefined for " + typeName() + "!", where);
         return null; // Required by the compiler!
     }
 
     // General:
 
-    public static void runtimeError(String message, int lNum) {
-        Main.error("Asp runtime error on line " + lNum + ": " + message);
+    public static void runtimeError(String message, int lineNumber) {
+        Main.error("Asp runtime error on line " + lineNumber + ": " + message);
     }
 
     public static void runtimeError(String message, AspSyntax where) {

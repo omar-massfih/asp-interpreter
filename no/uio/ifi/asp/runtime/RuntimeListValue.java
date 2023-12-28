@@ -5,14 +5,22 @@ import java.util.ArrayList;
 import no.uio.ifi.asp.parser.AspSyntax;
 
 public class RuntimeListValue extends RuntimeValue {
-    public ArrayList<RuntimeValue> rvs;
+    private ArrayList<RuntimeValue> runtimeValueList;
 
-    public RuntimeListValue(ArrayList<RuntimeValue> rvs) {
-        this.rvs = rvs;
+    public RuntimeListValue(ArrayList<RuntimeValue> runtimeValueList) {
+        this.runtimeValueList = runtimeValueList;
     }
 
-    public ArrayList<RuntimeValue> getRvs() {
-        return rvs;
+    public RuntimeListValue() {
+        runtimeValueList = new ArrayList<>();
+    }
+
+    public ArrayList<RuntimeValue> getRuntimeValueList() {
+        return runtimeValueList;
+    }
+
+    public void addElem(RuntimeValue runtimeValue) {
+        runtimeValueList.add(runtimeValue);
     }
 
     @Override
@@ -22,7 +30,7 @@ public class RuntimeListValue extends RuntimeValue {
 
     @Override
     public boolean getBoolValue(String what, AspSyntax where) {
-        return !rvs.isEmpty();
+        return !runtimeValueList.isEmpty();
     }
 
     @Override
@@ -32,54 +40,56 @@ public class RuntimeListValue extends RuntimeValue {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[");
+        StringBuilder stringBuilder = new StringBuilder("[");
 
-        for (int i = 0; i < rvs.size(); i++) {
-            sb.append(rvs.get(i));
-            if (i != rvs.size() - 1) {
-                sb.append(", ");
+        for (int i = 0; i < runtimeValueList.size(); i++) {
+            stringBuilder.append(runtimeValueList.get(i));
+
+            if (i != runtimeValueList.size() - 1) {
+                stringBuilder.append(", ");
             }
         }
 
-        sb.append("]");
-        return sb.toString();
+        stringBuilder.append("]");
+        return stringBuilder.toString();
     }
 
     @Override
-    public RuntimeValue evalMultiply(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeIntegerValue) {
-            long times = v.getIntValue("* operator", where);
+    public RuntimeValue evalMultiply(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeIntegerValue) {
+            long times = runtimeValue.getIntValue("* operator", where);
+
             if (times < 0) {
-                return super.evalMultiply(v, where);
+                return super.evalMultiply(runtimeValue, where);
             }
 
             ArrayList<RuntimeValue> newList = new ArrayList<>();
 
             for (int t = 0; t < times; t++) {
-                newList.addAll(rvs);
+                newList.addAll(runtimeValueList);
             }
 
             return new RuntimeListValue(newList);
         }
 
-        return super.evalMultiply(v, where);
+        return super.evalMultiply(runtimeValue, where);
     }
 
     @Override
-    public RuntimeValue evalEqual(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeListValue) {
-            RuntimeListValue rvsOther = (RuntimeListValue) v;
-            return new RuntimeBoolValue(rvs.equals(rvsOther.rvs));
+    public RuntimeValue evalEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeListValue) {
+            RuntimeListValue rvsOther = (RuntimeListValue) runtimeValue;
+            return new RuntimeBoolValue(runtimeValueList.equals(rvsOther.runtimeValueList));
         }
 
         return new RuntimeBoolValue(false);
     }
 
     @Override
-    public RuntimeValue evalNotEqual(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeListValue) {
-            RuntimeListValue rvsOther = (RuntimeListValue) v;
-            return new RuntimeBoolValue(!(rvs.equals(rvsOther.rvs)));
+    public RuntimeValue evalNotEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeListValue) {
+            RuntimeListValue rvsOther = (RuntimeListValue) runtimeValue;
+            return new RuntimeBoolValue(!(runtimeValueList.equals(rvsOther.runtimeValueList)));
         }
 
         return new RuntimeBoolValue(true);
@@ -87,37 +97,37 @@ public class RuntimeListValue extends RuntimeValue {
 
     @Override
     public RuntimeValue evalNot(AspSyntax where) {
-        return new RuntimeBoolValue(rvs.isEmpty());
+        return new RuntimeBoolValue(runtimeValueList.isEmpty());
     }
 
     @Override
-    public RuntimeValue evalSubscription(RuntimeValue v, AspSyntax where) {
-        if (!(v instanceof RuntimeIntegerValue)) {
-            return super.evalSubscription(v, where);
+    public RuntimeValue evalSubscription(RuntimeValue runtimeValue, AspSyntax where) {
+        if (!(runtimeValue instanceof RuntimeIntegerValue)) {
+            return super.evalSubscription(runtimeValue, where);
         }
 
-        long index = v.getIntValue("int", where);
+        long index = runtimeValue.getIntValue("int", where);
 
-        if (index < 0 || index >= rvs.size()) {
-            return super.evalSubscription(v, where);
+        if (index < 0 || index >= runtimeValueList.size()) {
+            return super.evalSubscription(runtimeValue, where);
         }
 
-        return rvs.get((int) index);
+        return runtimeValueList.get((int) index);
     }
 
     @Override
     public void evalAssignElem(RuntimeValue inx, RuntimeValue val, AspSyntax where) {
         int index = (int) inx.getIntValue("int", where);
 
-        if (index < 0 || index >= rvs.size()) {
+        if (index < 0 || index >= runtimeValueList.size()) {
             super.evalAssignElem(inx, val, where);
         } else {
-            rvs.set(index, val);
+            runtimeValueList.set(index, val);
         }
     }
 
     @Override
     public RuntimeValue evalLen(AspSyntax where) {
-        return new RuntimeIntegerValue(rvs.size());
+        return new RuntimeIntegerValue(runtimeValueList.size());
     }
 }

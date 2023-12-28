@@ -19,18 +19,24 @@ public class RuntimeDictValue extends RuntimeValue {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("{");
+        StringBuilder string = new StringBuilder("{");
 
         for (Map.Entry<String, RuntimeValue> entry : dict.entrySet()) {
-            sb.append("'").append(entry.getKey()).append("'").append(": ").append(entry.getValue()).append(", ");
+            string
+                .append("'")
+                .append(entry.getKey())
+                .append("'")
+                .append(": ")
+                .append(entry.getValue())
+                .append(", ");
         }
 
-        if (sb.length() > 1) {
-            sb.setLength(sb.length() - 2);
+        if (string.length() > 1) {
+            string.setLength(string.length() - 2);
         }
 
-        sb.append("}");
-        return sb.toString();
+        string.append("}");
+        return string.toString();
     }
 
     @Override
@@ -68,10 +74,10 @@ public class RuntimeDictValue extends RuntimeValue {
 
         String keyString = key.getStringValue("string", where);
 
-        RuntimeValue rv = dict.get(keyString);
+        RuntimeValue runtimeValue = dict.get(keyString);
 
-        if (rv != null) {
-            return rv;
+        if (runtimeValue != null) {
+            return runtimeValue;
         }
 
         return super.evalSubscription(key, where);

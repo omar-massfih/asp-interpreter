@@ -15,45 +15,46 @@ import no.uio.ifi.asp.main.*;
 import no.uio.ifi.asp.parser.AspSyntax;
 
 public class RuntimeScope {
-	private RuntimeScope outer;
+	private RuntimeScope outerScope;
 	private HashMap<String, RuntimeValue> decls = new HashMap<>();
 	private ArrayList<String> globalNames = new ArrayList<>();
 
 	public RuntimeScope() {
 		// Used by the library (and when testing expressions in part 3)
-		outer = null;
+		outerScope = null;
 	}
 
-	public RuntimeScope(RuntimeScope oScope) {
+	public RuntimeScope(RuntimeScope outerScope) {
 		// Used by all user scopes
-		outer = oScope;
+		this.outerScope = outerScope;
 	}
 
-	public void assign(String id, RuntimeValue val) {
+	public void assign(String id, RuntimeValue runtimeValue) {
 		if (globalNames.contains(id)) {
-			Main.globalScope.decls.put(id, val);
+			Main.globalScope.decls.put(id, runtimeValue);
 		} else {
-			decls.put(id, val);
+			decls.put(id, runtimeValue);
 		}
 	}
 
 	public RuntimeValue find(String id, AspSyntax where) {
 		if (globalNames.contains(id)) {
-			RuntimeValue v = Main.globalScope.decls.get(id);
+			RuntimeValue runtimeValue = Main.globalScope.decls.get(id);
 
-			if (v != null) {
-				return v;
+			if (runtimeValue != null) {
+				return runtimeValue;
 			}
 		} else {
 			RuntimeScope scope = this;
 
 			while (scope != null) {
-				RuntimeValue v = scope.decls.get(id);
+				RuntimeValue runtimeValue = scope.decls.get(id);
 
-				if (v != null) {
-					return v;
+				if (runtimeValue != null) {
+					return runtimeValue;
 				}
-				scope = scope.outer;
+				
+				scope = scope.outerScope;
 			}
 		}
 		

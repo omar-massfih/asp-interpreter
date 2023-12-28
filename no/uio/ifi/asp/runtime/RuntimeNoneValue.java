@@ -25,8 +25,8 @@ public class RuntimeNoneValue extends RuntimeValue {
     }
 
     @Override
-    public RuntimeValue evalEqual(RuntimeValue v, AspSyntax where) {
-        return new RuntimeBoolValue(v instanceof RuntimeNoneValue);
+    public RuntimeValue evalEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        return new RuntimeBoolValue(runtimeValue instanceof RuntimeNoneValue);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class RuntimeNoneValue extends RuntimeValue {
     }
 
     @Override
-    public RuntimeValue evalNotEqual(RuntimeValue v, AspSyntax where) {
-        return new RuntimeBoolValue(!(v instanceof RuntimeNoneValue));
+    public RuntimeValue evalNotEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        return new RuntimeBoolValue(!(runtimeValue instanceof RuntimeNoneValue));
     }
 }

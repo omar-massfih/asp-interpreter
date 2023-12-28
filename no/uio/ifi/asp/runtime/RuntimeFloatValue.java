@@ -3,10 +3,10 @@ package no.uio.ifi.asp.runtime;
 import no.uio.ifi.asp.parser.AspSyntax;
 
 public class RuntimeFloatValue extends RuntimeValue {
-    private double floatVal;
+    private double floatValue;
 
     public RuntimeFloatValue(double floatVal) {
-        this.floatVal = floatVal;
+        this.floatValue = floatVal;
     }
 
     @Override
@@ -16,22 +16,22 @@ public class RuntimeFloatValue extends RuntimeValue {
 
     @Override
     public String toString() {
-        return Double.toString(floatVal);
+        return Double.toString(floatValue);
     }
 
     @Override
     public boolean getBoolValue(String what, AspSyntax where) {
-        return floatVal != 0.0;
+        return floatValue != 0.0;
     }
 
     @Override
     public double getFloatValue(String what, AspSyntax where) {
-        return floatVal;
+        return floatValue;
     }
 
     @Override
     public long getIntValue(String what, AspSyntax where) {
-        return (long) Math.floor(floatVal);
+        return (long) Math.floor(floatValue);
     }
 
     @Override
@@ -40,72 +40,72 @@ public class RuntimeFloatValue extends RuntimeValue {
     }
 
     @Override
-    public RuntimeValue evalAdd(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            double operand = v.getFloatValue("+ operator", where);
-            return new RuntimeFloatValue(floatVal + operand);
+    public RuntimeValue evalAdd(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            double operand = runtimeValue.getFloatValue("+ operator", where);
+            return new RuntimeFloatValue(floatValue + operand);
         }
 
-        return super.evalAdd(v, where);
+        return super.evalAdd(runtimeValue, where);
     }
 
     @Override
-    public RuntimeValue evalDivide(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            double operand = v.getFloatValue("/ operator", where);
-            return new RuntimeFloatValue(floatVal / operand);
+    public RuntimeValue evalDivide(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            double operand = runtimeValue.getFloatValue("/ operator", where);
+            return new RuntimeFloatValue(floatValue / operand);
         }
 
-        return super.evalDivide(v, where);
+        return super.evalDivide(runtimeValue, where);
     }
 
     @Override
-    public RuntimeValue evalEqual(RuntimeValue v, AspSyntax where){
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            return new RuntimeBoolValue(floatVal == v.getFloatValue("", where));
+    public RuntimeValue evalEqual(RuntimeValue runtimeValue, AspSyntax where){
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            return new RuntimeBoolValue(floatValue == runtimeValue.getFloatValue("", where));
         }
 
-        if (v instanceof RuntimeBoolValue || v instanceof RuntimeNoneValue) {
-            return new RuntimeBoolValue(getBoolValue("", where) == v.getBoolValue("", where));
+        if (runtimeValue instanceof RuntimeBoolValue || runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(getBoolValue("", where) == runtimeValue.getBoolValue("", where));
         }
 
-        return super.evalEqual(v, where);
+        return super.evalEqual(runtimeValue, where);
     }
 
     @Override
-    public RuntimeValue evalGreater(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            double operand = v.getFloatValue("> operator", where);
-            return new RuntimeBoolValue(floatVal > operand);
+    public RuntimeValue evalGreater(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            double operand = runtimeValue.getFloatValue("> operator", where);
+            return new RuntimeBoolValue(floatValue > operand);
         }
 
-        return super.evalGreater(v, where);
+        return super.evalGreater(runtimeValue, where);
     }
 
     @Override
-    public RuntimeValue evalGreaterEqual(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            double operand = v.getFloatValue(">= operator", where);
-            return new RuntimeBoolValue(floatVal >= operand);
+    public RuntimeValue evalGreaterEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            double operand = runtimeValue.getFloatValue(">= operator", where);
+            return new RuntimeBoolValue(floatValue >= operand);
         }
 
-        return super.evalGreaterEqual(v, where);
+        return super.evalGreaterEqual(runtimeValue, where);
     }
 
     @Override
-    public RuntimeValue evalIntDivide(RuntimeValue v, AspSyntax where) {
+    public RuntimeValue evalIntDivide(RuntimeValue runtimeValue, AspSyntax where) {
         double operand;
 
-        if (v instanceof RuntimeFloatValue) {
-            operand = v.getFloatValue("// operator", where);
-        } else if (v instanceof RuntimeIntegerValue) {
-            operand = v.getIntValue("// operator", where);
+        if (runtimeValue instanceof RuntimeFloatValue) {
+            operand = runtimeValue.getFloatValue("// operator", where);
+        } else if (runtimeValue instanceof RuntimeIntegerValue) {
+            operand = runtimeValue.getIntValue("// operator", where);
         } else {
-            return super.evalIntDivide(v, where);
+            return super.evalIntDivide(runtimeValue, where);
         }
 
         if (operand == 0) {
-            return super.evalIntDivide(v, where);
+            return super.evalIntDivide(runtimeValue, where);
         }
 
         double result = Math.floor((double) getIntValue("", where) / operand);
@@ -114,87 +114,87 @@ public class RuntimeFloatValue extends RuntimeValue {
     }
 
     @Override
-    public RuntimeValue evalLess(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue) {
-            double operand = v.getFloatValue("< operator", where);
+    public RuntimeValue evalLess(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue) {
+            double operand = runtimeValue.getFloatValue("< operator", where);
             return new RuntimeBoolValue(getIntValue("", where) < operand);
-        } else if (v instanceof RuntimeIntegerValue) {
-            long operand = v.getIntValue("< operator", where);
-            return new RuntimeBoolValue(floatVal < operand);
+        } else if (runtimeValue instanceof RuntimeIntegerValue) {
+            long operand = runtimeValue.getIntValue("< operator", where);
+            return new RuntimeBoolValue(floatValue < operand);
         }
     
-        return super.evalLess(v, where);
+        return super.evalLess(runtimeValue, where);
     }
     
     @Override
-    public RuntimeValue evalLessEqual(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            double operand = v.getFloatValue("<= operator", where);
-            return new RuntimeBoolValue(floatVal <= operand);
+    public RuntimeValue evalLessEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            double operand = runtimeValue.getFloatValue("<= operator", where);
+            return new RuntimeBoolValue(floatValue <= operand);
         }
 
-        return super.evalLessEqual(v, where);
+        return super.evalLessEqual(runtimeValue, where);
     }
 
     @Override
-    public RuntimeValue evalModulo(RuntimeValue v, AspSyntax where) {
-        if (!(v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue)) {
-            return super.evalModulo(v, where);
+    public RuntimeValue evalModulo(RuntimeValue runtimeValue, AspSyntax where) {
+        if (!(runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue)) {
+            return super.evalModulo(runtimeValue, where);
         }
     
-        double operand = v.getFloatValue("% operand", where);
+        double operand = runtimeValue.getFloatValue("% operand", where);
 
-        double result = floatVal - operand * Math.floor(floatVal / operand);
+        double result = floatValue - operand * Math.floor(floatValue / operand);
 
         return new RuntimeFloatValue(result);
     }
     
     @Override
-    public RuntimeValue evalMultiply(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            double operand = v.getFloatValue("* operator", where);
-            return new RuntimeFloatValue(floatVal * operand);
+    public RuntimeValue evalMultiply(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            double operand = runtimeValue.getFloatValue("* operator", where);
+            return new RuntimeFloatValue(floatValue * operand);
         }
 
-        return super.evalMultiply(v, where);
+        return super.evalMultiply(runtimeValue, where);
     }
 
     @Override
     public RuntimeValue evalNegate(AspSyntax where) {
-        return new RuntimeFloatValue(-floatVal);
+        return new RuntimeFloatValue(-floatValue);
     }
 
     @Override
     public RuntimeValue evalNot(AspSyntax where) {
-        return new RuntimeBoolValue(floatVal == 0);
+        return new RuntimeBoolValue(floatValue == 0);
     }
 
     @Override
-    public RuntimeValue evalNotEqual(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            double operand = v.getFloatValue("!= operator", where);
-            return new RuntimeBoolValue(floatVal != operand);
+    public RuntimeValue evalNotEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            double operand = runtimeValue.getFloatValue("!= operator", where);
+            return new RuntimeBoolValue(floatValue != operand);
         }
 
-        if (v instanceof RuntimeBoolValue || v instanceof RuntimeNoneValue) {
-            return new RuntimeBoolValue(getBoolValue("", where) == v.getBoolValue("", where));
+        if (runtimeValue instanceof RuntimeBoolValue || runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(getBoolValue("", where) == runtimeValue.getBoolValue("", where));
         }
 
-        return super.evalNotEqual(v, where);
+        return super.evalNotEqual(runtimeValue, where);
     }
 
     @Override
     public RuntimeValue evalPositive(AspSyntax where) {
-        return new RuntimeFloatValue(floatVal);
+        return new RuntimeFloatValue(floatValue);
     }
 
     @Override
-    public RuntimeValue evalSubtract(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeFloatValue || v instanceof RuntimeIntegerValue) {
-            double operand = v.getFloatValue("- operator", where);
-            return new RuntimeFloatValue(floatVal - operand);
+    public RuntimeValue evalSubtract(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
+            double operand = runtimeValue.getFloatValue("- operator", where);
+            return new RuntimeFloatValue(floatValue - operand);
         }
 
-        return super.evalSubtract(v, where);
+        return super.evalSubtract(runtimeValue, where);
     }
 }
