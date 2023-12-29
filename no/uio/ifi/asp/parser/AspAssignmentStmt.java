@@ -7,6 +7,7 @@ import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.equalToken;
+import static no.uio.ifi.asp.scanner.TokenKind.leftBracketToken;
 
 public class AspAssignmentStmt extends AspSmallStmt {
     AspName aspName;
@@ -19,15 +20,17 @@ public class AspAssignmentStmt extends AspSmallStmt {
 
     public static AspAssignmentStmt parse(Scanner scanner) {
         enterParser("assignment");
+
         AspAssignmentStmt aspAssignmentStmt = new AspAssignmentStmt(scanner.curLineNum());
         aspAssignmentStmt.aspName = AspName.parse(scanner);
 
-        while (scanner.curToken().kind != equalToken) {
+        while (scanner.curToken().kind == leftBracketToken) {
             aspAssignmentStmt.aspSubsriptionList.add(AspSubscription.parse(scanner));
         }
 
         skip(scanner, equalToken);
         aspAssignmentStmt.aspExpr = AspExpr.parse(scanner);
+
         leaveParser("assignment");
         return aspAssignmentStmt;
     }

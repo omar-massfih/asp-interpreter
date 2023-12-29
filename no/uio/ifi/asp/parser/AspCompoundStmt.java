@@ -9,21 +9,19 @@ public abstract class AspCompoundStmt extends AspStmt {
 
     public static AspCompoundStmt parse(Scanner scanner) {
         enterParser("compound stmt");
+        
         AspCompoundStmt aspCompundStmt = null;
 
         switch (scanner.curToken().kind) {
             case forToken:
                 aspCompundStmt = AspForStmt.parse(scanner);
                 break;
-
             case ifToken:
                 aspCompundStmt = AspIfStmt.parse(scanner);
                 break;
-
             case whileToken:
                 aspCompundStmt = AspWhileStmt.parse(scanner);
                 break;
-
             case defToken:
                 aspCompundStmt = AspFuncDef.parse(scanner);
                 break;

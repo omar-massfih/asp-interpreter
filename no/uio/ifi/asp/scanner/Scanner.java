@@ -85,20 +85,21 @@ public class Scanner {
 		}
 
 		// Add indent, dedent and eof tokens
-		if (line == null) {
-			while (!indents.isEmpty() && indents.peek() > 0) {
-				indents.pop();
-				curLineTokens.add(new Token(dedentToken));
-			}
-
-			curLineTokens.add(new Token(TokenKind.eofToken));
-
-			for (Token t : curLineTokens) {
+		if (sourceFile == null) {
+			while (indents.size() > 1) {
+				Token t = new Token(dedentToken);
+				curLineTokens.add(t);
 				Main.log.noteToken(t);
+				indents.pop();
 			}
-		}
 
-		// Skip line if empty or starts with a comment
+			Token t = new Token(eofToken);
+			curLineTokens.add(t);
+			Main.log.noteToken(t);
+			return;
+		} 
+
+		// Skip line if empty
 		if (line.trim().isEmpty() || line.trim().charAt(0) == '#') {
 			return;
 		}
@@ -111,11 +112,12 @@ public class Scanner {
 			indents.push(n);
 			curLineTokens.add(new Token(indentToken, curLineNum()));
 		} else {
-			while (!indents.isEmpty() && n < indents.peek()) {
-				indents.pop();
+			while (n < indents.peek()) {
 				curLineTokens.add(new Token(dedentToken, curLineNum()));
+				indents.pop();
 			}
-			if (indents.isEmpty() || n != indents.peek()) {
+
+			if (n != indents.peek()) {
 				indentationError = true;
 				scannerError("Indentation error.");
 			}
@@ -331,7 +333,7 @@ public class Scanner {
 				spaceCount++;
 				newLine.append(' ');
 			} else if (s.charAt(i) == '\t') {
-				int spacesToAdd = 4 - (spaceCount % 4);
+				int spacesToAdd = TABDIST - (spaceCount % 4);
 				for (int j = 0; j < spacesToAdd; j++) {
 					newLine.append(' ');
 				}

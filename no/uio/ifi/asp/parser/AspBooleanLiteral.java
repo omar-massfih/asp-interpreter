@@ -7,12 +7,9 @@ import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
-import no.uio.ifi.asp.scanner.TokenKind;
 
 public class AspBooleanLiteral extends AspAtom{
-    String booleanString;
     boolean booleanLiteral;
-    TokenKind booleanKind;
 
     AspBooleanLiteral(int lineNumber) {
         super(lineNumber);
@@ -20,21 +17,20 @@ public class AspBooleanLiteral extends AspAtom{
 
     public static AspBooleanLiteral parse(Scanner scanner) {
         enterParser("boolean literal");
+        
         AspBooleanLiteral aspBooleanLiteral = new AspBooleanLiteral(scanner.curLineNum());
-        aspBooleanLiteral.booleanString = scanner.curToken().toString();
 
-        switch (aspBooleanLiteral.booleanString) {
-            case "True":
+        switch (scanner.curToken().kind) {
+            case trueToken:
                 aspBooleanLiteral.booleanLiteral = true;
-                aspBooleanLiteral.booleanKind = trueToken;
+                skip(scanner, trueToken);
                 break;
             default:
                 aspBooleanLiteral.booleanLiteral = false;
-                aspBooleanLiteral.booleanKind = falseToken;
+                skip(scanner,  falseToken);
                 break;
         }
 
-        skip(scanner, aspBooleanLiteral.booleanKind);
         leaveParser("boolean literal");
         return aspBooleanLiteral;
     }

@@ -23,13 +23,13 @@ public class AspSmallStmtList extends AspStmt{
         
         while (scanner.curToken().kind == semicolonToken) {
             skip(scanner, semicolonToken);
-
+            
             if (scanner.curToken().kind == newLineToken) {
                 break;
             }
 
             aspSmallStmtList.aspSmallStmtList.add(AspSmallStmt.parse(scanner));
-        }
+		}
 
         skip(scanner, newLineToken);
 

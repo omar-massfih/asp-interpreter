@@ -23,21 +23,19 @@ public class AspDictDisplay extends AspAtom {
         AspDictDisplay aspDictDisplay = new AspDictDisplay(scanner.curLineNum());
         skip(scanner, leftBraceToken);
 
-        while (true) {
-            if (scanner.curToken().kind == stringToken) {
-                aspDictDisplay.aspStringLiterals.add(AspStringLiteral.parse(scanner));
-                skip(scanner, colonToken);
-                aspDictDisplay.aspExprs.add(AspExpr.parse(scanner));
+        if (scanner.curToken().kind != rightBraceToken) {
+			while (scanner.curToken().kind == stringToken) {
+				aspDictDisplay.aspStringLiterals.add(AspStringLiteral.parse(scanner));
+				skip(scanner, colonToken);
+				aspDictDisplay.aspExprs.add(AspExpr.parse(scanner));
 
-                if (scanner.curToken().kind == commaToken) {
-                    skip(scanner, commaToken);
-                } else {
-                    break;
+				if (scanner.curToken().kind != commaToken) {
+					break;
                 }
-            } else {
-                break;
-            }
-        }
+
+				skip(scanner, commaToken);
+			}
+		}
 
         skip(scanner, rightBraceToken);
         leaveParser("dict display");

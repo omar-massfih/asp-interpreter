@@ -19,6 +19,7 @@ public class AspComparison extends AspSyntax {
 
     public static AspComparison parse(Scanner scanner) {
         enterParser("comparison");
+
         AspComparison aspComparison = new AspComparison(scanner.curLineNum());
         aspComparison.aspTermList.add(AspTerm.parse(scanner));
 
@@ -44,47 +45,41 @@ public class AspComparison extends AspSyntax {
 
     @Override
     public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        if (aspTermList.isEmpty()) {
-            return null;
-        }
-
         RuntimeValue returnValue = aspTermList.get(0).eval(curScope);
 
         for (int i = 1; i < aspTermList.size(); i++) {
-            returnValue = aspTermList.get(i - 1).eval(curScope);
-            RuntimeValue curTerm = aspTermList.get(i).eval(curScope);
+            RuntimeValue returnValue2 = aspTermList.get(i).eval(curScope);
+            TokenKind tokenKind = aspCompOprList.get(i - 1).operatorToken.kind;
 
-            if (i - 1 < aspCompOprList.size()) {
-                TokenKind tokenKind = aspCompOprList.get(i - 1).operatorToken.kind;
-
-                switch (tokenKind) {
-                    case lessToken:
-                        returnValue = returnValue.evalLess(curTerm, this);
-                        break;
-                    case greaterToken:
-                        returnValue = returnValue.evalGreater(curTerm, this);
-                        break;
-                    case doubleEqualToken:
-                        returnValue = returnValue.evalEqual(curTerm, this);
-                        break;
-                    case greaterEqualToken:
-                        returnValue = returnValue.evalGreaterEqual(curTerm, this);
-                        break;
-                    case lessEqualToken:
-                        returnValue = returnValue.evalLessEqual(curTerm, this);
-                        break;
-                    case notEqualToken:
-                        returnValue = returnValue.evalNotEqual(curTerm, this);
-                        break;
-                    default:
-                        Main.panic("Comparison operator: " + tokenKind + " not allowed.");
-                        break;
-                }
+            switch (tokenKind) {
+                case lessToken:
+                    returnValue = returnValue.evalLess(returnValue2, this);
+                    break;
+                case greaterToken:
+                    returnValue = returnValue.evalGreater(returnValue2, this);
+                    break;
+                case doubleEqualToken:
+                    returnValue = returnValue.evalEqual(returnValue2, this);
+                    break;
+                case greaterEqualToken:
+                    returnValue = returnValue.evalGreaterEqual(returnValue2, this);
+                    break;
+                case lessEqualToken:
+                    returnValue = returnValue.evalLessEqual(returnValue2, this);
+                    break;
+                case notEqualToken:
+                    returnValue = returnValue.evalNotEqual(returnValue2, this);
+                    break;
+                default:
+                    Main.panic("Comparison operator: " + tokenKind + " not allowed.");
+                    break;
             }
 
             if (!returnValue.getBoolValue("comparison operand", this)) {
                 return returnValue;
             }
+
+            returnValue = returnValue2;
         }
 
         return returnValue;

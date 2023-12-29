@@ -4,10 +4,10 @@ import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
-import no.uio.ifi.asp.scanner.Token;
+import no.uio.ifi.asp.scanner.TokenKind;
 
 public class AspFactorPrefix extends AspSyntax {
-    Token factorKind;
+    TokenKind factorKind;
     
     AspFactorPrefix(int lineNumber) {
         super(lineNumber);
@@ -17,7 +17,7 @@ public class AspFactorPrefix extends AspSyntax {
         enterParser("factor prefix");
         
         AspFactorPrefix aspFactorPrefix = new AspFactorPrefix(scanner.curLineNum());
-        aspFactorPrefix.factorKind = scanner.curToken();
+        aspFactorPrefix.factorKind = scanner.curToken().kind;
         skip(scanner, scanner.curToken().kind);
 
         leaveParser("factor prefix");

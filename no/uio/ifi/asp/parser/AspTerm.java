@@ -20,10 +20,11 @@ public class AspTerm extends AspSyntax {
         enterParser("term");
 
         AspTerm aspTerm = new AspTerm(scanner.curLineNum());
+        aspTerm.aspFactorList.add(AspFactor.parse(scanner));
 
         while (scanner.isTermOpr()) {
-            aspTerm.aspFactorList.add(AspFactor.parse(scanner));
             aspTerm.aspTermOprList.add(AspTermOpr.parse(scanner));
+            aspTerm.aspFactorList.add(AspFactor.parse(scanner));
         }
 
         leaveParser("term");

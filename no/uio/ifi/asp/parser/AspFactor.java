@@ -19,6 +19,7 @@ public class AspFactor extends AspSyntax {
 
     public static AspFactor parse(Scanner scanner) {
         enterParser("factor");
+        
         AspFactor aspFactor = new AspFactor(scanner.curLineNum());
 
         while (true) {
@@ -30,11 +31,11 @@ public class AspFactor extends AspSyntax {
 
             aspFactor.aspPrimaryList.add(AspPrimary.parse(scanner));
 
-            if (scanner.isFactorOpr()) {
-                aspFactor.aspFactorOprList.add(AspFactorOpr.parse(scanner));
-            } else {
+            if (!scanner.isFactorOpr()) {
                 break;
             }
+
+            aspFactor.aspFactorOprList.add(AspFactorOpr.parse(scanner));
         }
 
         leaveParser("factor");
@@ -93,7 +94,7 @@ public class AspFactor extends AspSyntax {
 
     private RuntimeValue evalPrefix(RuntimeValue returnValue, List<AspFactorPrefix> aspFactorPrefixList, int index) {
         if (aspFactorPrefixList.get(index) != null) {
-            TokenKind tokenKind = aspFactorPrefixList.get(index).factorKind.kind;
+            TokenKind tokenKind = aspFactorPrefixList.get(index).factorKind;
             switch (tokenKind) {
                 case plusToken:
                     return returnValue.evalPositive(this);

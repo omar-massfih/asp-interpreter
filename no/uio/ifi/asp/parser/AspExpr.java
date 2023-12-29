@@ -19,6 +19,7 @@ public class AspExpr extends AspSyntax {
 
     public static AspExpr parse(Scanner scanner) {
         enterParser("expr");
+
         AspExpr aspExpr = new AspExpr(scanner.curLineNum());
 
         while (true) {
@@ -54,7 +55,7 @@ public class AspExpr extends AspSyntax {
         RuntimeValue runtimeValue = andTestList.get(0).eval(curScope);
 
         for (int i = 1; i < andTestList.size(); i++){
-            if (runtimeValue.getBoolValue("or", this)) {
+            if (runtimeValue.getBoolValue("or operand", this)) {
                 return runtimeValue;
             }
 

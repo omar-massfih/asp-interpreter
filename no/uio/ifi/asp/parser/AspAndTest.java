@@ -16,6 +16,7 @@ public class AspAndTest extends AspSyntax {
 
     public static AspAndTest parse(Scanner scanner) {
         enterParser("and test");
+        
         AspAndTest aspAndTest = new AspAndTest(scanner.curLineNum());
 
         while (true) {

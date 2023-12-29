@@ -14,14 +14,14 @@ public abstract class AspSmallStmt extends AspSyntax {
 
         AspSmallStmt aspSmallStmt = null;
 
-        if (scanner.curToken().kind == nameToken && scanner.anyEqualToken()) {
-            aspSmallStmt = AspAssignmentStmt.parse(scanner);
+        if (scanner.curToken().kind == globalToken) {
+            aspSmallStmt = AspGlobalStmt.parse(scanner);
         } else if (scanner.curToken().kind == passToken) {
             aspSmallStmt = AspPassStmt.parse(scanner);
         } else if (scanner.curToken().kind == returnToken) {
             aspSmallStmt = AspReturnStmt.parse(scanner);
-        } else if (scanner.curToken().kind == globalToken) {
-            aspSmallStmt = AspGlobalStmt.parse(scanner);
+        } else if (scanner.curToken().kind == nameToken && scanner.anyEqualToken()) {
+            aspSmallStmt = AspAssignmentStmt.parse(scanner);
         } else {
             aspSmallStmt = AspExprStmt.parse(scanner);
         }

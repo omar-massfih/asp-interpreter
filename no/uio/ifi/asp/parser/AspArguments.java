@@ -17,6 +17,7 @@ public class AspArguments extends AspPrimarySuffix{
 
     public static AspArguments parse(Scanner scanner) {
         enterParser("arguments");
+        
         AspArguments aspArguments = new AspArguments(scanner.curLineNum());
         skip(scanner, leftParToken);
     
@@ -33,6 +34,7 @@ public class AspArguments extends AspPrimarySuffix{
         }
     
         skip(scanner, rightParToken);
+
         leaveParser("arguments");
         return aspArguments;
     }
