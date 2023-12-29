@@ -77,6 +77,10 @@ public class RuntimeListValue extends RuntimeValue {
 
     @Override
     public RuntimeValue evalEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(false);
+        }
+        
         if (runtimeValue instanceof RuntimeListValue) {
             RuntimeListValue rvsOther = (RuntimeListValue) runtimeValue;
             return new RuntimeBoolValue(runtimeValueList.equals(rvsOther.runtimeValueList));
@@ -87,10 +91,14 @@ public class RuntimeListValue extends RuntimeValue {
 
     @Override
     public RuntimeValue evalNotEqual(RuntimeValue runtimeValue, AspSyntax where) {
-        if (runtimeValue instanceof RuntimeListValue) {
+        if (runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(true);
+        }
+
+        /* if (runtimeValue instanceof RuntimeListValue) {
             RuntimeListValue rvsOther = (RuntimeListValue) runtimeValue;
             return new RuntimeBoolValue(!(runtimeValueList.equals(rvsOther.runtimeValueList)));
-        }
+        } */
 
         return new RuntimeBoolValue(true);
     }

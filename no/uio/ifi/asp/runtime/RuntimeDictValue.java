@@ -58,17 +58,22 @@ public class RuntimeDictValue extends RuntimeValue {
         return new RuntimeBoolValue(dict.isEmpty());
     }
 
-    public RuntimeValue evalEqual(RuntimeValue v, AspSyntax where) {
-        if (v instanceof RuntimeNoneValue) {
+    public RuntimeValue evalEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeNoneValue) {
             return new RuntimeBoolValue(false);
         }
 
-        if (v instanceof RuntimeDictValue) {
-            v.equals(this);
-        }
-
-        return super.evalEqual(v, where);
+        return super.evalEqual(runtimeValue, where);
     }
+
+    @Override
+	public RuntimeValue evalNotEqual(RuntimeValue runtimeValue, AspSyntax where) {
+		if (runtimeValue instanceof RuntimeNoneValue) {
+			return new RuntimeBoolValue(true);
+		}
+		
+        return super.evalEqual(runtimeValue, where);
+	}
 
     @Override
     public RuntimeValue evalSubscription(RuntimeValue key, AspSyntax where) {

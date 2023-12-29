@@ -59,6 +59,10 @@ public class RuntimeStringValue extends RuntimeValue {
             return new RuntimeBoolValue(stringValue.compareTo(runtimeValue.getStringValue("string", where)) > 0);
         }
 
+        if (runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(false);
+        }
+
         return super.evalGreater(runtimeValue, where);
     }
 
@@ -111,7 +115,12 @@ public class RuntimeStringValue extends RuntimeValue {
             return new RuntimeBoolValue(true);
         }
 
-        return new RuntimeBoolValue(!stringValue.equals(runtimeValue.getStringValue("", where)));
+        if (runtimeValue instanceof RuntimeStringValue) {
+            String v2 = runtimeValue.getStringValue("!= operand",where);
+            return new RuntimeBoolValue(stringValue.compareTo(v2) != 0);
+        } 
+
+        return super.evalNotEqual(runtimeValue, where);
     }
 
     @Override

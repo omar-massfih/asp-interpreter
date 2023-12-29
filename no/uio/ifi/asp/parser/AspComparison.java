@@ -46,6 +46,7 @@ public class AspComparison extends AspSyntax {
     @Override
     public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
         RuntimeValue returnValue = aspTermList.get(0).eval(curScope);
+        RuntimeValue res = returnValue;
 
         for (int i = 1; i < aspTermList.size(); i++) {
             RuntimeValue returnValue2 = aspTermList.get(i).eval(curScope);
@@ -53,22 +54,22 @@ public class AspComparison extends AspSyntax {
 
             switch (tokenKind) {
                 case lessToken:
-                    returnValue = returnValue.evalLess(returnValue2, this);
+                    res = returnValue.evalLess(returnValue2, this);
                     break;
                 case greaterToken:
-                    returnValue = returnValue.evalGreater(returnValue2, this);
+                    res = returnValue.evalGreater(returnValue2, this);
                     break;
                 case doubleEqualToken:
-                    returnValue = returnValue.evalEqual(returnValue2, this);
+                    res = returnValue.evalEqual(returnValue2, this);
                     break;
                 case greaterEqualToken:
-                    returnValue = returnValue.evalGreaterEqual(returnValue2, this);
+                    res = returnValue.evalGreaterEqual(returnValue2, this);
                     break;
                 case lessEqualToken:
-                    returnValue = returnValue.evalLessEqual(returnValue2, this);
+                    res = returnValue.evalLessEqual(returnValue2, this);
                     break;
                 case notEqualToken:
-                    returnValue = returnValue.evalNotEqual(returnValue2, this);
+                    res = returnValue.evalNotEqual(returnValue2, this);
                     break;
                 default:
                     Main.panic("Comparison operator: " + tokenKind + " not allowed.");
@@ -76,12 +77,12 @@ public class AspComparison extends AspSyntax {
             }
 
             if (!returnValue.getBoolValue("comparison operand", this)) {
-                return returnValue;
+                return res;
             }
 
             returnValue = returnValue2;
         }
 
-        return returnValue;
+        return res;
     }
 }

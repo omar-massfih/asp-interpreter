@@ -69,6 +69,10 @@ public class RuntimeIntegerValue extends RuntimeValue {
 
     @Override
     public RuntimeValue evalEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(false);
+        } 
+        
         if (!(runtimeValue instanceof RuntimeIntegerValue || runtimeValue instanceof RuntimeFloatValue)) {
             return super.evalEqual(runtimeValue, where);
         }
@@ -182,6 +186,10 @@ public class RuntimeIntegerValue extends RuntimeValue {
 
     @Override
     public RuntimeValue evalNotEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(true);
+        }
+
         if (runtimeValue instanceof RuntimeIntegerValue) {
             return new RuntimeBoolValue(intValue != runtimeValue.getIntValue("!= operator", where));
         }

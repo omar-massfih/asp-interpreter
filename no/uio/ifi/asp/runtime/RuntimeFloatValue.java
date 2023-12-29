@@ -61,13 +61,18 @@ public class RuntimeFloatValue extends RuntimeValue {
 
     @Override
     public RuntimeValue evalEqual(RuntimeValue runtimeValue, AspSyntax where){
+        if (runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(false);
+        }
+        
         if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
             return new RuntimeBoolValue(floatValue == runtimeValue.getFloatValue("", where));
         }
 
-        if (runtimeValue instanceof RuntimeBoolValue || runtimeValue instanceof RuntimeNoneValue) {
+        if (runtimeValue instanceof RuntimeBoolValue) {
             return new RuntimeBoolValue(getBoolValue("", where) == runtimeValue.getBoolValue("", where));
         }
+
 
         return super.evalEqual(runtimeValue, where);
     }
@@ -171,12 +176,16 @@ public class RuntimeFloatValue extends RuntimeValue {
 
     @Override
     public RuntimeValue evalNotEqual(RuntimeValue runtimeValue, AspSyntax where) {
+        if (runtimeValue instanceof RuntimeNoneValue) {
+            return new RuntimeBoolValue(true);
+        }
+        
         if (runtimeValue instanceof RuntimeFloatValue || runtimeValue instanceof RuntimeIntegerValue) {
             double operand = runtimeValue.getFloatValue("!= operator", where);
             return new RuntimeBoolValue(floatValue != operand);
         }
 
-        if (runtimeValue instanceof RuntimeBoolValue || runtimeValue instanceof RuntimeNoneValue) {
+        if (runtimeValue instanceof RuntimeBoolValue) {
             return new RuntimeBoolValue(getBoolValue("", where) == runtimeValue.getBoolValue("", where));
         }
 
