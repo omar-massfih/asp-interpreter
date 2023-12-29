@@ -3,7 +3,7 @@ package no.uio.ifi.asp.runtime;
 import no.uio.ifi.asp.parser.AspSyntax;
 
 public class RuntimeFloatValue extends RuntimeValue {
-    private double floatValue;
+    double floatValue;
 
     public RuntimeFloatValue(double floatVal) {
         this.floatValue = floatVal;

@@ -7,7 +7,7 @@ import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
 
 public class AspName extends AspAtom {
-    private String name;
+    String name;
 
     AspName(int lineNumber) {
         super(lineNumber);

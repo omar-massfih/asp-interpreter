@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import no.uio.ifi.asp.parser.AspSyntax;
 
 public class RuntimeListValue extends RuntimeValue {
-    private ArrayList<RuntimeValue> runtimeValueList;
+    ArrayList<RuntimeValue> runtimeValueList;
 
     public RuntimeListValue(ArrayList<RuntimeValue> runtimeValueList) {
         this.runtimeValueList = runtimeValueList;

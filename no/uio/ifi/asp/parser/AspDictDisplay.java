@@ -66,7 +66,7 @@ public class AspDictDisplay extends AspAtom {
         RuntimeDictValue runtimeDictValue = new RuntimeDictValue(new HashMap<>());
 
         for (int i = 0; i < aspStringLiterals.size(); i++) {
-            runtimeDictValue.dict.put(aspStringLiterals.get(i).stringLiteral , aspExprs.get(i).eval(curScope));
+            runtimeDictValue.getDict().put(aspStringLiterals.get(i).stringLiteral , aspExprs.get(i).eval(curScope));
         }
 
         return runtimeDictValue;

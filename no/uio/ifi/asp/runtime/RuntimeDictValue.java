@@ -6,7 +6,7 @@ import java.util.Map;
 import no.uio.ifi.asp.parser.AspSyntax;
 
 public class RuntimeDictValue extends RuntimeValue {
-    public HashMap<String, RuntimeValue> dict;
+    HashMap<String, RuntimeValue> dict;
 
     public RuntimeDictValue(HashMap<String, RuntimeValue> dict) {
         this.dict = dict;
@@ -15,6 +15,10 @@ public class RuntimeDictValue extends RuntimeValue {
     @Override
     String typeName() {
         return "dictionary";
+    }
+
+    public HashMap<String, RuntimeValue> getDict() {
+        return dict;
     }
 
     @Override

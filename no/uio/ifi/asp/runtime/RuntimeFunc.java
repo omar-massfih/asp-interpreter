@@ -7,10 +7,10 @@ import no.uio.ifi.asp.parser.AspFuncDef;
 import no.uio.ifi.asp.parser.AspSyntax;
 
 public class RuntimeFunc extends RuntimeValue {
-    private AspFuncDef aspFuncDef;
-    private String name;
-    private ArrayList<RuntimeValue> parameters;
-    private RuntimeScope runtimeScope;
+    AspFuncDef aspFuncDef;
+    String name;
+    ArrayList<RuntimeValue> parameters;
+    RuntimeScope runtimeScope;
 
     public RuntimeFunc(RuntimeValue runtimeValue, RuntimeScope curScope, AspFuncDef aspFuncDef, ArrayList<RuntimeValue> parameters) {
         this.aspFuncDef = aspFuncDef;

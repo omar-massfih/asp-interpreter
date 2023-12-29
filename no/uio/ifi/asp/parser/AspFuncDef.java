@@ -11,7 +11,7 @@ import no.uio.ifi.asp.scanner.Scanner;
 import java.util.ArrayList;
 
 public class AspFuncDef extends AspCompoundStmt {
-    private AspName aspName;
+    AspName aspName;
     ArrayList<AspName> parameters = new ArrayList<>();
     AspSuite aspSuite;
 
