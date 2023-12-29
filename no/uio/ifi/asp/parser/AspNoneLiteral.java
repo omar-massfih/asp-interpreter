@@ -13,11 +13,11 @@ public class AspNoneLiteral extends AspAtom{
         super(lineNumber);
     }
 
-    public static AspNoneLiteral parse(Scanner s) {
+    public static AspNoneLiteral parse(Scanner scanner) {
         enterParser("none literal");
-        AspNoneLiteral aspNoneLiteral = new AspNoneLiteral(s.curLineNum());
-        
-        skip(s, noneToken);
+
+        AspNoneLiteral aspNoneLiteral = new AspNoneLiteral(scanner.curLineNum());
+        skip(scanner, noneToken);
 
         leaveParser("none literal");
         return aspNoneLiteral;

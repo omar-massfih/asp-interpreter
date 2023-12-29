@@ -1,6 +1,8 @@
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
+
+import no.uio.ifi.asp.main.Main;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
@@ -18,15 +20,11 @@ public class AspComparison extends AspSyntax {
     public static AspComparison parse(Scanner scanner) {
         enterParser("comparison");
         AspComparison aspComparison = new AspComparison(scanner.curLineNum());
+        aspComparison.aspTermList.add(AspTerm.parse(scanner));
 
-        while (true) {
+        while (scanner.isCompOpr()) {
+            aspComparison.aspCompOprList.add(AspCompOpr.parse(scanner));
             aspComparison.aspTermList.add(AspTerm.parse(scanner));
-
-            if (scanner.isCompOpr()) {
-                aspComparison.aspCompOprList.add(AspCompOpr.parse(scanner));
-            } else {
-                break;
-            }
         }
 
         leaveParser("comparison");
@@ -35,16 +33,12 @@ public class AspComparison extends AspSyntax {
 
     @Override
     public void prettyPrint() {
-        int i = 0;
-
-        while (i < aspTermList.size()) {
+        for (int i = 0; i < aspTermList.size(); i++) {
             aspTermList.get(i).prettyPrint();
-
+            
             if (i < aspCompOprList.size()) {
                 aspCompOprList.get(i).prettyPrint();
             }
-            
-            i++;
         }
     }
 
@@ -61,9 +55,9 @@ public class AspComparison extends AspSyntax {
             RuntimeValue curTerm = aspTermList.get(i).eval(curScope);
 
             if (i - 1 < aspCompOprList.size()) {
-                TokenKind t = aspCompOprList.get(i - 1).operatorToken.kind;
+                TokenKind tokenKind = aspCompOprList.get(i - 1).operatorToken.kind;
 
-                switch (t) {
+                switch (tokenKind) {
                     case lessToken:
                         returnValue = returnValue.evalLess(curTerm, this);
                         break;
@@ -83,11 +77,12 @@ public class AspComparison extends AspSyntax {
                         returnValue = returnValue.evalNotEqual(curTerm, this);
                         break;
                     default:
+                        Main.panic("Comparison operator: " + tokenKind + " not allowed.");
                         break;
                 }
             }
 
-            if (!returnValue.getBoolValue("", this)) {
+            if (!returnValue.getBoolValue("comparison operand", this)) {
                 return returnValue;
             }
         }

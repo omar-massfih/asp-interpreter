@@ -15,8 +15,8 @@ public class AspCompOpr extends AspSyntax{
 
     public static AspCompOpr parse(Scanner scanner) {
         enterParser("comp opr");
-        AspCompOpr aspCompOpr = new AspCompOpr(scanner.curLineNum());
 
+        AspCompOpr aspCompOpr = new AspCompOpr(scanner.curLineNum());
         aspCompOpr.operatorToken = scanner.curToken();
         skip(scanner, scanner.curToken().kind);
 

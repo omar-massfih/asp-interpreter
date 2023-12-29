@@ -8,10 +8,11 @@ import no.uio.ifi.asp.runtime.RuntimeValue;
 
 public class AspNotTest extends AspSyntax{
     AspComparison aspComparison;
-    boolean notTest = false;
+    boolean notTest;
     
     AspNotTest(int lineNumber) {
         super(lineNumber);
+        notTest = false;
     }
 
     public static AspNotTest parse(Scanner scanner) {

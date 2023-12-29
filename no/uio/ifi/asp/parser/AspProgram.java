@@ -19,6 +19,7 @@ public class AspProgram extends AspSyntax {
 
     public static AspProgram parse(Scanner scanner) {
         enterParser("program");
+        
         AspProgram aspProgram = new AspProgram(scanner.curLineNum());
         
         while (scanner.curToken().kind != eofToken) {

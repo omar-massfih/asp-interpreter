@@ -1,13 +1,12 @@
 package no.uio.ifi.asp.parser;
 
+import static no.uio.ifi.asp.scanner.TokenKind.*;
 import java.util.ArrayList;
-
 import no.uio.ifi.asp.runtime.RuntimeListValue;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
-import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 public class AspArguments extends AspPrimarySuffix{
     ArrayList<AspExpr> aspExprList = new ArrayList<>();
@@ -19,20 +18,21 @@ public class AspArguments extends AspPrimarySuffix{
     public static AspArguments parse(Scanner scanner) {
         enterParser("arguments");
         AspArguments aspArguments = new AspArguments(scanner.curLineNum());
-    
         skip(scanner, leftParToken);
     
         if (scanner.curToken().kind != rightParToken) {
-            aspArguments.aspExprList.add(AspExpr.parse(scanner));
-    
-            while (scanner.curToken().kind == commaToken) {
-                skip(scanner, commaToken);
+            while (true) {
                 aspArguments.aspExprList.add(AspExpr.parse(scanner));
+                
+                if (scanner.curToken().kind == rightParToken) {
+                    break;
+                }
+
+                skip(scanner, commaToken);
             }
         }
     
         skip(scanner, rightParToken);
-    
         leaveParser("arguments");
         return aspArguments;
     }
@@ -41,16 +41,12 @@ public class AspArguments extends AspPrimarySuffix{
     public void prettyPrint() {
         prettyWrite("(");
 
-        boolean isFirst = true;
-
-        for (AspExpr ae : aspExprList) {
-            if (!isFirst) {
+        for (int i = 0; i < aspExprList.size(); i++) {
+            if (i > 0) {
                 prettyWrite(", ");
-            } else {
-                isFirst = false;
             }
 
-            ae.prettyPrint();
+            aspExprList.get(i).prettyPrint();
         }
 
         prettyWrite(")");

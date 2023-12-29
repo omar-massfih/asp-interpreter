@@ -15,12 +15,12 @@ public class AspIntegerLiteral extends AspAtom {
         super(lineNumber);
     }
 
-    public static AspIntegerLiteral parse(Scanner s) {
+    public static AspIntegerLiteral parse(Scanner scanner) {
         enterParser("integer literal");
 
-        AspIntegerLiteral aspIntegerLiteral = new AspIntegerLiteral(s.curLineNum());
-        aspIntegerLiteral.integerLiteral = s.curToken().integerLit;
-        skip(s, integerToken);
+        AspIntegerLiteral aspIntegerLiteral = new AspIntegerLiteral(scanner.curLineNum());
+        aspIntegerLiteral.integerLiteral = scanner.curToken().integerLit;
+        skip(scanner, integerToken);
 
         leaveParser("integer literal");
         return aspIntegerLiteral;

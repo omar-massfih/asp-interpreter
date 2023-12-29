@@ -16,8 +16,8 @@ public class AspGlobalStmt extends AspSmallStmt {
 
     public static AspGlobalStmt parse(Scanner scanner) {
         enterParser("global stmt");
-        AspGlobalStmt aspGlobalStmt = new AspGlobalStmt(scanner.curLineNum());
 
+        AspGlobalStmt aspGlobalStmt = new AspGlobalStmt(scanner.curLineNum());
         skip(scanner, globalToken);
 
         while (true) {
@@ -39,18 +39,26 @@ public class AspGlobalStmt extends AspSmallStmt {
         prettyWrite("global ");
 
         for (int i = 0; i < aspNameList.size(); i++) {
-            aspNameList.get(i).prettyPrint();
-
-            if (aspNameList.size() > 1 && i < aspNameList.size() - 1) {
+            if (i > 0) {
                 prettyWrite(", ");
             }
+
+            aspNameList.get(i).prettyPrint();
         }
     }
 
     @Override
     RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
         for (AspName aspName : aspNameList) {
-            curScope.registerGlobalName(aspName.name);
+            if (curScope.hasDefined(aspName.getName())) {
+                RuntimeValue.runtimeError("Name " + aspName.getName() + " assigned to before global declaration!", this);
+            }
+
+            if (curScope.hasGlobalName(aspName.getName())) {
+                RuntimeValue.runtimeError("Name " + aspName.getName() + " already declared as global!", this);
+            }
+
+            curScope.registerGlobalName(aspName.getName());
         }
 
         return null;

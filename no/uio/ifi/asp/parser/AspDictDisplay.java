@@ -5,10 +5,9 @@ import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
 import no.uio.ifi.asp.scanner.Scanner;
-import static no.uio.ifi.asp.scanner.TokenKind.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import static no.uio.ifi.asp.scanner.TokenKind.*;
 
 public class AspDictDisplay extends AspAtom {
     ArrayList<AspStringLiteral> aspStringLiterals = new ArrayList<>();
@@ -20,8 +19,8 @@ public class AspDictDisplay extends AspAtom {
 
     public static AspDictDisplay parse(Scanner scanner) {
         enterParser("dict displat");
-        AspDictDisplay aspDictDisplay = new AspDictDisplay(scanner.curLineNum());
 
+        AspDictDisplay aspDictDisplay = new AspDictDisplay(scanner.curLineNum());
         skip(scanner, leftBraceToken);
 
         while (true) {
@@ -41,7 +40,6 @@ public class AspDictDisplay extends AspAtom {
         }
 
         skip(scanner, rightBraceToken);
-
         leaveParser("dict display");
         return aspDictDisplay;
     }
@@ -51,13 +49,13 @@ public class AspDictDisplay extends AspAtom {
         prettyWrite("{");
 
         for (int i = 0; i < aspStringLiterals.size(); i++) {
+            if (i > 0) {
+                prettyWrite(", ");
+            }
+
             aspStringLiterals.get(i).prettyPrint();
             prettyWrite(":");
             aspExprs.get(i).prettyPrint();
-
-            if (i < aspStringLiterals.size() - 1) {
-                prettyWrite(", ");
-            }
         }
 
         prettyWrite("}");

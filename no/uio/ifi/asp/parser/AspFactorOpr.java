@@ -15,8 +15,8 @@ public class AspFactorOpr extends AspSyntax{
 
     public static AspFactorOpr parse(Scanner scanner) {
         enterParser("factor opr");
-        AspFactorOpr aspFactorOpr = new AspFactorOpr(scanner.curLineNum());
 
+        AspFactorOpr aspFactorOpr = new AspFactorOpr(scanner.curLineNum());
         aspFactorOpr.token = scanner.curToken();
         skip(scanner, scanner.curToken().kind);
 

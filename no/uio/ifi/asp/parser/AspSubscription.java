@@ -15,8 +15,8 @@ public class AspSubscription extends AspPrimarySuffix{
 
     public static AspSubscription parse(Scanner scanner) {
         enterParser("subscription");
-        AspSubscription aspSubscription = new AspSubscription(scanner.curLineNum());
 
+        AspSubscription aspSubscription = new AspSubscription(scanner.curLineNum());
         skip(scanner, leftBracketToken);
         aspSubscription.aspExpr = AspExpr.parse(scanner);
         skip(scanner, rightBracketToken);

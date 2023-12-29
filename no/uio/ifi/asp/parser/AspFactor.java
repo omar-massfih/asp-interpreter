@@ -2,7 +2,6 @@ package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
@@ -66,12 +65,12 @@ public class AspFactor extends AspSyntax {
         }
 
         for (int i = 1; i < aspPrimaryList.size(); i++) {
-            TokenKind tk = aspFactorOprList.get(i - 1).token.kind;
+            TokenKind tokenKind = aspFactorOprList.get(i - 1).token.kind;
             RuntimeValue runtimeValue2 = aspPrimaryList.get(i).eval(curScope);
 
             runtimeValue2 = evalPrefix(runtimeValue2, aspFactorPrefixList, i);
 
-            switch (tk) {
+            switch (tokenKind) {
                 case astToken:
                     runtimeValue = runtimeValue.evalMultiply(runtimeValue2, this);
                     break;
@@ -85,6 +84,7 @@ public class AspFactor extends AspSyntax {
                     runtimeValue = runtimeValue.evalModulo(runtimeValue2, this);
                     break;
                 default:
+                    parserError("Factor operator not allowed " + aspFactorOprList.get(i).token, i);
             }
         }
 
@@ -100,7 +100,7 @@ public class AspFactor extends AspSyntax {
                 case minusToken:
                     return returnValue.evalNegate(this);
                 default:
-                    return returnValue;
+                    parserError("Prefix operator not allowed" + aspFactorPrefixList.get(index).factorKind, index);
             }
         }
 

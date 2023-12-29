@@ -11,7 +11,7 @@ import no.uio.ifi.asp.scanner.Scanner;
 import java.util.ArrayList;
 
 public class AspFuncDef extends AspCompoundStmt {
-    public AspName aspName;
+    private AspName aspName;
     ArrayList<AspName> parameters = new ArrayList<>();
     AspSuite aspSuite;
 
@@ -21,8 +21,8 @@ public class AspFuncDef extends AspCompoundStmt {
 
     public static AspFuncDef parse(Scanner scanner) {
         enterParser("func def");
-        AspFuncDef aspFuncDef = new AspFuncDef(scanner.curLineNum());
 
+        AspFuncDef aspFuncDef = new AspFuncDef(scanner.curLineNum());
         skip(scanner, defToken);
         aspFuncDef.aspName = AspName.parse(scanner);
         skip(scanner, leftParToken);
@@ -31,11 +31,11 @@ public class AspFuncDef extends AspCompoundStmt {
             while (true) {
                 aspFuncDef.parameters.add(AspName.parse(scanner));
 
-                if (scanner.curToken().kind == commaToken) {
-                    skip(scanner, commaToken);
-                } else {
+                if (scanner.curToken().kind == rightParToken) {
                     break;
                 }
+
+                skip(scanner, commaToken);
             }
         }
 
@@ -54,32 +54,31 @@ public class AspFuncDef extends AspCompoundStmt {
         prettyWrite(" (");
 
         for (int i = 0; i < parameters.size(); i++) {
-            parameters.get(i).prettyPrint();
-
-            if (parameters.size() > 1 && i < parameters.size() - 1) {
+            if (i > 0) {
                 prettyWrite(", ");
             }
+            
+            parameters.get(i).prettyPrint();
         }
 
-        prettyWrite(")");
-        prettyWrite(": ");
+        prettyWrite("): ");
         aspSuite.prettyPrint();
         prettyWriteLn();
     }
 
     @Override
     public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        trace("def " + aspName.name);
+        trace("def " + aspName.getName());
         
         ArrayList<RuntimeValue> runtimeValueList = new ArrayList<>(parameters.size());
-        RuntimeStringValue runtimeStringValue = new RuntimeStringValue(aspName.name);
+        RuntimeStringValue runtimeStringValue = new RuntimeStringValue(aspName.getName());
 
         for (AspName aspName : parameters) {
-            runtimeValueList.add(new RuntimeStringValue(aspName.name));
+            runtimeValueList.add(new RuntimeStringValue(aspName.getName()));
         }
 
         RuntimeFunc runtimeFunc = new RuntimeFunc(runtimeStringValue, curScope, this, runtimeValueList);
-        curScope.assign(aspName.name, runtimeFunc);
+        curScope.assign(aspName.getName(), runtimeFunc);
 
         return null;
     }

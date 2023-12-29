@@ -7,10 +7,14 @@ import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
 
 public class AspName extends AspAtom {
-    public String name;
+    private String name;
 
     AspName(int lineNumber) {
         super(lineNumber);
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static AspName parse(Scanner scanner) {
@@ -26,7 +30,7 @@ public class AspName extends AspAtom {
 
     @Override
     void prettyPrint() {
-        prettyWrite(name + "");
+        prettyWrite(name);
     }
 
     @Override

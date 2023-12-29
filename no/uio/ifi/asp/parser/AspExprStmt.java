@@ -14,8 +14,8 @@ public class AspExprStmt extends AspSmallStmt{
 
     public static AspExprStmt parse(Scanner scanner) {
         enterParser("expr stmt");
+        
         AspExprStmt aspExprStmt = new AspExprStmt(scanner.curLineNum());
-
         aspExprStmt.aspExpr = AspExpr.parse(scanner);
 
         leaveParser("expr stmt");

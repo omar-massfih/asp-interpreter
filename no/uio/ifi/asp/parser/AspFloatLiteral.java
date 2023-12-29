@@ -17,8 +17,8 @@ public class AspFloatLiteral extends AspAtom {
 
     public static AspFloatLiteral parse(Scanner scanner) {
         enterParser("float literal");
-        AspFloatLiteral aspFloatLiteral = new AspFloatLiteral(scanner.curLineNum());
 
+        AspFloatLiteral aspFloatLiteral = new AspFloatLiteral(scanner.curLineNum());
         aspFloatLiteral.floatLiteral = scanner.curToken().floatLit;
         skip(scanner, floatToken);
 

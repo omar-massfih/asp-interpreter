@@ -16,8 +16,8 @@ public class AspStringLiteral extends AspAtom{
 
     public static AspStringLiteral parse(Scanner scanner) {
         enterParser("string literal");
-        AspStringLiteral aspStringLiteral = new AspStringLiteral(scanner.curLineNum());
 
+        AspStringLiteral aspStringLiteral = new AspStringLiteral(scanner.curLineNum());
         aspStringLiteral.stringLiteral = scanner.curToken().stringLit;
         skip(scanner, stringToken);
 

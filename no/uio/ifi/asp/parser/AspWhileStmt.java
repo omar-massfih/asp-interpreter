@@ -17,8 +17,8 @@ public class AspWhileStmt extends AspCompoundStmt {
 
     public static AspWhileStmt parse(Scanner scanner) {
         enterParser("while stmt");
-        AspWhileStmt aspWhileStmt = new AspWhileStmt(scanner.curLineNum());
 
+        AspWhileStmt aspWhileStmt = new AspWhileStmt(scanner.curLineNum());
         skip(scanner, whileToken);
         aspWhileStmt.aspExpr = AspExpr.parse(scanner);
         skip(scanner, colonToken);
@@ -39,20 +39,19 @@ public class AspWhileStmt extends AspCompoundStmt {
     @Override
     public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
         RuntimeValue runtimeValue = null;
-        
+
         while (true) {
             runtimeValue = aspExpr.eval(curScope);
-            
+
             if (!runtimeValue.getBoolValue("while expr", this)) {
                 break;
             }
-            
+
             trace("while True: ...");
             aspSuite.eval(curScope);
         }
 
         trace("while False:");
-
         return runtimeValue;
     }
 }

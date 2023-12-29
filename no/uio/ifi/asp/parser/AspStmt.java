@@ -14,6 +14,7 @@ abstract class AspStmt extends AspSyntax {
 
     static AspStmt parse(Scanner scanner) {
         enterParser("stmt");
+        
         AspStmt aspStmt = null;
         
         switch (scanner.curToken().kind) {

@@ -18,11 +18,11 @@ public class Main {
     public static void main(String arg[]) {
         String fileName = null, baseFilename = null;
         boolean testExpr = false, testParser = false, testScanner = false,
-            logE = false, logP = false, logS = false, logY = false;
+                logE = false, logP = false, logS = false, logY = false;
 
         System.out.println("This is the IN2030 Asp interpreter (" + version + ")");
 
-        for (String a: arg) {
+        for (String a : arg) {
             if (a.equals("-logE")) {
                 logE = true;
             } else if (a.equals("-logP")) {
@@ -32,11 +32,11 @@ public class Main {
             } else if (a.equals("-logY")) {
                 logY = true;
             } else if (a.equals("-testexpr")) {
-                testExpr = true; 
+                testExpr = true;
             } else if (a.equals("-testparser")) {
-                testParser = true; 
+                testParser = true;
             } else if (a.equals("-testscanner")) {
-                testScanner = true; 
+                testScanner = true;
             } else if (a.startsWith("-")) {
                 usage();
             } else if (fileName != null) {
@@ -45,22 +45,27 @@ public class Main {
                 fileName = a;
             }
         }
-        if (fileName == null) usage();
+        if (fileName == null)
+            usage();
 
         baseFilename = fileName;
         if (baseFilename.endsWith(".asp"))
-            baseFilename = baseFilename.substring(0,baseFilename.length()-4);
+            baseFilename = baseFilename.substring(0, baseFilename.length() - 4);
         else if (baseFilename.endsWith(".py"))
-            baseFilename = baseFilename.substring(0,baseFilename.length()-3);
+            baseFilename = baseFilename.substring(0, baseFilename.length() - 3);
 
-        log = new LogFile(baseFilename+".log");
-        if (logE || testExpr) log.doLogEval = true;
-        if (logP || testParser) log.doLogParser = true;
-        if (logS || testScanner) log.doLogScanner = true;
-        if (logY || testExpr || testParser) log.doLogPrettyPrint = true;
+        log = new LogFile(baseFilename + ".log");
+        if (logE || testExpr)
+            log.doLogEval = true;
+        if (logP || testParser)
+            log.doLogParser = true;
+        if (logS || testScanner)
+            log.doLogScanner = true;
+        if (logY || testExpr || testParser)
+            log.doLogPrettyPrint = true;
 
         Scanner s = new Scanner(fileName);
-        if (testScanner) 
+        if (testScanner)
             doTestScanner(s);
         else if (testParser)
             doTestParser(s);
@@ -69,17 +74,16 @@ public class Main {
         else
             doRunInterpreter(s);
 
-        if (log != null) log.finish();
+        if (log != null)
+            log.finish();
         System.exit(0);
     }
-
 
     private static void doTestScanner(Scanner s) {
         do {
             s.readNextToken();
-        } while (s.curToken().kind != eofToken); 
+        } while (s.curToken().kind != eofToken);
     }
-
 
     private static void doTestParser(Scanner s) {
         AspProgram prog = AspProgram.parse(s);
@@ -88,7 +92,6 @@ public class Main {
         prog.prettyPrint();
     }
 
-
     private static void doTestExpr(Scanner s) {
         RuntimeScope emptyScope = new RuntimeScope();
 
@@ -96,7 +99,8 @@ public class Main {
             AspExpr e = AspExpr.parse(s);
             AspSyntax.skip(s, newLineToken);
 
-            e.prettyPrint();  log.prettyWriteLn(" ==>");
+            e.prettyPrint();
+            log.prettyWriteLn(" ==>");
             try {
                 RuntimeValue res = e.eval(emptyScope);
                 log.traceEval(res.showInfo(), e);
@@ -105,7 +109,6 @@ public class Main {
             }
         }
     }
-
 
     private static void doRunInterpreter(Scanner s) {
         AspProgram prog = AspProgram.parse(s);
@@ -123,37 +126,33 @@ public class Main {
         }
     }
 
-
     public static void error(String message) {
         System.out.println();
         System.err.println(message);
-        if (log != null) log.noteError(message);
+        if (log != null)
+            log.noteError(message);
         System.exit(1);
     }
 
-
     public static void panic(String message, int lineNum) {
         String m = "*** ASP PANIC";
-        if (lineNum > 0) m += " ON LINE " + lineNum;
+        if (lineNum > 0)
+            m += " ON LINE " + lineNum;
         error(m + " ***: " + message);
     }
-
 
     public static void panic(String message) {
         panic(message, 0);
     }
 
-
     private static void usage() {
-	try {
-	    String jarFullName = Main.class.getProtectionDomain().getCodeSource().
-		getLocation().toURI().getPath();
-	    String jarName = 
-		jarFullName.substring(jarFullName.lastIndexOf(java.io.File.separator)+1);
-	    error("Usage: java -jar " + jarName +
-		  " [-log{E|P|S|Y}] [-test{expr|parser|scanner}] file");
-	} catch (Exception e) {
-	    panic("Usage information error!");
-	}
+        try {
+            String jarFullName = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            String jarName = jarFullName.substring(jarFullName.lastIndexOf(java.io.File.separator) + 1);
+            error("Usage: java -jar " + jarName +
+                    " [-log{E|P|S|Y}] [-test{expr|parser|scanner}] file");
+        } catch (Exception e) {
+            panic("Usage information error!");
+        }
     }
 }

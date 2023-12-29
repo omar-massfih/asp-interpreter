@@ -1,8 +1,7 @@
 package no.uio.ifi.asp.parser;
 
-import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
-
+import no.uio.ifi.asp.scanner.Scanner;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
 import no.uio.ifi.asp.runtime.RuntimeValue;
@@ -14,13 +13,13 @@ public class AspInnerExpr extends AspAtom {
         super(lineNumber);
     }
 
-    public static AspInnerExpr parse(Scanner s) {
+    public static AspInnerExpr parse(Scanner scanner) {
         enterParser("inner expr");
-        AspInnerExpr aspInnerExpr = new AspInnerExpr(s.curLineNum());
 
-        skip(s, leftParToken);
-        aspInnerExpr.aspExpr = AspExpr.parse(s);
-        skip(s, rightParToken);
+        AspInnerExpr aspInnerExpr = new AspInnerExpr(scanner.curLineNum());
+        skip(scanner, leftParToken);
+        aspInnerExpr.aspExpr = AspExpr.parse(scanner);
+        skip(scanner, rightParToken);
 
         leaveParser("inner expr");
         return aspInnerExpr;

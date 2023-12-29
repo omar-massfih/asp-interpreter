@@ -15,8 +15,8 @@ public class AspFactorPrefix extends AspSyntax {
 
     public static AspFactorPrefix parse(Scanner scanner) {
         enterParser("factor prefix");
+        
         AspFactorPrefix aspFactorPrefix = new AspFactorPrefix(scanner.curLineNum());
-
         aspFactorPrefix.factorKind = scanner.curToken();
         skip(scanner, scanner.curToken().kind);
 

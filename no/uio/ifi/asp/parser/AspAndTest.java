@@ -41,7 +41,6 @@ public class AspAndTest extends AspSyntax {
 
             aspNotTestList.get(i).prettyPrint();
         }
-
     }
 
     @Override
@@ -49,8 +48,7 @@ public class AspAndTest extends AspSyntax {
         RuntimeValue runtimeValue = aspNotTestList.get(0).eval(curScope);
 
         for (int i = 1; i < aspNotTestList.size(); i++) {
-            //For å gå ut av testen ved tidligste False
-            if (!runtimeValue.getBoolValue("and", this)) {
+            if (!runtimeValue.getBoolValue("and operand", this)) {
                 return runtimeValue;
             }
 

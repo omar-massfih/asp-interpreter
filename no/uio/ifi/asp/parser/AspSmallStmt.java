@@ -3,7 +3,7 @@ package no.uio.ifi.asp.parser;
 import no.uio.ifi.asp.scanner.Scanner;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
 
-public abstract class AspSmallStmt extends AspSyntax{
+public abstract class AspSmallStmt extends AspSyntax {
 
     AspSmallStmt(int lineNumber) {
         super(lineNumber);
@@ -11,10 +11,10 @@ public abstract class AspSmallStmt extends AspSyntax{
 
     public static AspSmallStmt parse(Scanner scanner) {
         enterParser("small stmt");
+
         AspSmallStmt aspSmallStmt = null;
 
-
-        if (scanner.anyEqualToken()){
+        if (scanner.curToken().kind == nameToken && scanner.anyEqualToken()) {
             aspSmallStmt = AspAssignmentStmt.parse(scanner);
         } else if (scanner.curToken().kind == passToken) {
             aspSmallStmt = AspPassStmt.parse(scanner);
@@ -25,7 +25,7 @@ public abstract class AspSmallStmt extends AspSyntax{
         } else {
             aspSmallStmt = AspExprStmt.parse(scanner);
         }
-        
+
         leaveParser("small stmt");
         return aspSmallStmt;
     }

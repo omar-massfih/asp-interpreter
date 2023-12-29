@@ -1,7 +1,6 @@
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
-
 import no.uio.ifi.asp.runtime.RuntimeListValue;
 import no.uio.ifi.asp.runtime.RuntimeReturnValue;
 import no.uio.ifi.asp.runtime.RuntimeScope;
@@ -18,21 +17,19 @@ public class AspListDisplay extends AspAtom {
 
     public static AspListDisplay parse(Scanner scanner) {
         enterParser("list display");
-        AspListDisplay aspListDisplay = new AspListDisplay(scanner.curLineNum());
 
+        AspListDisplay aspListDisplay = new AspListDisplay(scanner.curLineNum());
         skip(scanner, leftBracketToken);
 
-        while (true) {
-            if (scanner.curToken().kind != rightBracketToken) {
+        if (scanner.curToken().kind != rightBracketToken) {
+            while (true) {
                 aspListDisplay.aspExprList.add(AspExpr.parse(scanner));
-                
-                if (scanner.curToken().kind == commaToken) {
-                    skip(scanner, commaToken);
-                } else {
+
+                if (scanner.curToken().kind == rightBracketToken) {
                     break;
                 }
-            } else {
-                break;
+
+                skip(scanner, commaToken);
             }
         }
 
@@ -47,11 +44,11 @@ public class AspListDisplay extends AspAtom {
         prettyWrite("[");
 
         for (int i = 0; i < aspExprList.size(); i++) {
-            aspExprList.get(i).prettyPrint();
-
-            if (i < aspExprList.size() - 1) {
+            if (i > 0) {
                 prettyWrite(", ");
             }
+            
+            aspExprList.get(i).prettyPrint();
         }
 
         prettyWrite("]");

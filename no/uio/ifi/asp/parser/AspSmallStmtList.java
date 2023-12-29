@@ -17,6 +17,7 @@ public class AspSmallStmtList extends AspStmt{
 
     public static AspSmallStmtList parse(Scanner scanner) {
         enterParser("small stmt list");
+
         AspSmallStmtList aspSmallStmtList = new AspSmallStmtList(scanner.curLineNum());
         aspSmallStmtList.aspSmallStmtList.add(AspSmallStmt.parse(scanner));
         
@@ -31,6 +32,7 @@ public class AspSmallStmtList extends AspStmt{
         }
 
         skip(scanner, newLineToken);
+
         leaveParser("small stmt list");
         return aspSmallStmtList;
     }
@@ -38,11 +40,11 @@ public class AspSmallStmtList extends AspStmt{
     @Override
     void prettyPrint() {
         for (int i = 0; i < aspSmallStmtList.size(); i++) {
-            aspSmallStmtList.get(i).prettyPrint();
-
-            if (i < aspSmallStmtList.size() - 1) {
+            if (i > 0) {
                 prettyWrite("; ");
             }
+            
+            aspSmallStmtList.get(i).prettyPrint();
         }
         
         prettyWriteLn();

@@ -21,8 +21,8 @@ public class AspForStmt extends AspCompoundStmt {
 
     public static AspForStmt parse(Scanner scanner) {
         enterParser("for stmt");
-        AspForStmt aspForStmt = new AspForStmt(scanner.curLineNum());
 
+        AspForStmt aspForStmt = new AspForStmt(scanner.curLineNum());
         skip(scanner, forToken);
         aspForStmt.aspName = AspName.parse(scanner);
         skip(scanner, inToken);
@@ -46,25 +46,22 @@ public class AspForStmt extends AspCompoundStmt {
 
     @Override
     public RuntimeValue eval(RuntimeScope curScope) throws RuntimeReturnValue {
-        RuntimeValue rv = aspExpr.eval(curScope);
-        
-        if (rv instanceof RuntimeListValue) {
-            ArrayList<RuntimeValue> list = ((RuntimeListValue) rv).getRuntimeValueList();
+        RuntimeValue runtimeValue = aspExpr.eval(curScope);
 
-            int i = 0;
-
-            while (list.get(i) == null) {
-                i++;
-            }
-            
-            for (int j = i; j < list.size(); j++) {
-                trace("for #" + (j + 1) + ": " + aspName.name + " = " + (j + 1));
-                curScope.assign(aspName.name, list.get(j));
-                aspSuite.eval(curScope);
-            }
-
+        if (!(runtimeValue instanceof RuntimeListValue)) {
+            RuntimeValue.runtimeError("For loop range is not a list!", aspExpr);
         }
+        
+        ArrayList<RuntimeValue> runtimeValueList = ((RuntimeListValue) runtimeValue).getRuntimeValueList();
+        int i = 1;
 
-        return rv;
+        for (RuntimeValue runtimeValue2 : runtimeValueList) {
+			curScope.assign(aspName.getName(), runtimeValue2);
+			trace("for #" + (i) + ": " + aspName.getName() + " = " + runtimeValue2.showInfo());
+			aspSuite.eval(curScope);
+            i++;
+		}
+
+        return runtimeValue;
     }
 }

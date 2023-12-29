@@ -18,16 +18,12 @@ public class AspTerm extends AspSyntax {
 
     public static AspTerm parse(Scanner scanner) {
         enterParser("term");
+
         AspTerm aspTerm = new AspTerm(scanner.curLineNum());
 
-        while (true) {
+        while (scanner.isTermOpr()) {
             aspTerm.aspFactorList.add(AspFactor.parse(scanner));
-
-            if (scanner.isTermOpr()) {
-                aspTerm.aspTermOprList.add(AspTermOpr.parse(scanner));
-            } else {
-                break;
-            }
+            aspTerm.aspTermOprList.add(AspTermOpr.parse(scanner));
         }
 
         leaveParser("term");
@@ -59,6 +55,8 @@ public class AspTerm extends AspSyntax {
                 runtimeValue = runtimeValue.evalSubtract(runtimeValue2, this);
             } else if (tokenKind == plusToken) {
                 runtimeValue = runtimeValue.evalAdd(runtimeValue2, this);
+            } else {
+                parserError("Term operator " + tokenKind + " not allowed.", lineNum);
             }
         }
         

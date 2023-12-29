@@ -6,7 +6,6 @@
 package no.uio.ifi.asp.parser;
 
 import java.util.ArrayList;
-
 import no.uio.ifi.asp.runtime.*;
 import no.uio.ifi.asp.scanner.*;
 import static no.uio.ifi.asp.scanner.TokenKind.*;
@@ -20,7 +19,6 @@ public class AspExpr extends AspSyntax {
 
     public static AspExpr parse(Scanner scanner) {
         enterParser("expr");
-
         AspExpr aspExpr = new AspExpr(scanner.curLineNum());
 
         while (true) {

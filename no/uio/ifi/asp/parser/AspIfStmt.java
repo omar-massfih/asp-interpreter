@@ -18,8 +18,8 @@ public class AspIfStmt extends AspCompoundStmt {
 
     public static AspIfStmt parse(Scanner scanner) {
         enterParser("if stmt");
-        AspIfStmt aspIfStmt = new AspIfStmt(scanner.curLineNum());
 
+        AspIfStmt aspIfStmt = new AspIfStmt(scanner.curLineNum());
         skip(scanner, ifToken);
 
         while (true) {
@@ -68,13 +68,14 @@ public class AspIfStmt extends AspCompoundStmt {
         for (int i = 0; i < aspExprList.size(); ++i) {
             if (aspExprList.get(i).eval(curScope).getBoolValue("if", this)) {
                 trace("if True alt #" + (i + 1) + ": ...");
-                return aspSuiteList.get(i).eval(curScope);
+                aspSuiteList.get(i).eval(curScope);
+                return null;
             }
         }
         
         if (elseSuite != null) {
             trace("else: ...");
-            return elseSuite.eval(curScope);
+            elseSuite.eval(curScope);
         }
         
         return null;
