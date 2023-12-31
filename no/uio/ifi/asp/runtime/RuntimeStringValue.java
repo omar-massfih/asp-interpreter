@@ -16,7 +16,16 @@ public class RuntimeStringValue extends RuntimeValue {
 
     @Override
     public String toString() {
-        return "\'" + stringValue + "\'";
+        return stringValue;
+    }
+
+    @Override
+    public String showInfo() {
+        if (stringValue.indexOf('\'') >= 0) {
+            return '"' + stringValue + '"';
+        } else {
+            return "'" + stringValue + "'";
+        }
     }
 
     @Override
@@ -116,9 +125,9 @@ public class RuntimeStringValue extends RuntimeValue {
         }
 
         if (runtimeValue instanceof RuntimeStringValue) {
-            String v2 = runtimeValue.getStringValue("!= operand",where);
+            String v2 = runtimeValue.getStringValue("!= operand", where);
             return new RuntimeBoolValue(stringValue.compareTo(v2) != 0);
-        } 
+        }
 
         return super.evalNotEqual(runtimeValue, where);
     }
@@ -127,7 +136,7 @@ public class RuntimeStringValue extends RuntimeValue {
     public RuntimeValue evalSubscription(RuntimeValue runtimeValue, AspSyntax where) {
         if (runtimeValue instanceof RuntimeIntegerValue) {
             int index = (int) runtimeValue.getIntValue("int", where);
-    
+
             if (index >= 0 && index < stringValue.length()) {
                 return new RuntimeStringValue(stringValue.charAt(index) + "");
             }

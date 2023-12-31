@@ -66,8 +66,12 @@ public class RuntimeLibrary extends RuntimeScope {
                     AspSyntax where) {
                 Main.log.traceEval("Call function print with params " + actualParams.toString(), where);
 
-                for (RuntimeValue parameter : actualParams) {
-                    System.out.print(parameter.getStringValue(null, where) + " ");
+                for (int i = 0; i < actualParams.size(); ++i) {
+                    if (i > 0) {
+                        System.out.print(" ");
+                    }
+
+                    System.out.print(actualParams.get(i).toString());
                 }
 
                 System.out.println();
